@@ -33,6 +33,14 @@ public class Activity {
     public Activity() {
         
     }
+
+    public Activity(int id, String name, String description, String district) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.district = district;
+    }
+    
     
     public Activity(int id, String name, String description, String district, ArrayList<String> dates, Place place) {
         this.id = id;
@@ -50,5 +58,9 @@ public class Activity {
     @JsonProperty public ArrayList<String> getDates() { return dates; }
     @JsonProperty public Place getPlace() { return place; }
     
+    @Override
+    public String toString(){
+        return String.format("%s\t%s\t%s", name, description, district);
+    }  
     
 }
