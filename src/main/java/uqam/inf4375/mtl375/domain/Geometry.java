@@ -1,4 +1,6 @@
-package uqam.inf4375.mtl375.resources;
+package uqam.inf4375.mtl375.domain;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Geometry {
   private String type;

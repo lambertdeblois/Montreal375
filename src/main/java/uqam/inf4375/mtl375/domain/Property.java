@@ -1,4 +1,6 @@
-package uqam.inf4375.mtl375.resources;
+package uqam.inf4375.mtl375.domain;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Property {
   private float id;
@@ -12,6 +14,10 @@ public class Property {
   private String protege4s;
   private boolean villeMtl;
   private String nomArrVille;
+
+  public Property() {
+
+  }
 
   public Property(float id, float idTrcGeobase, int typeVoie, int typeVoie2, int longueur, int nbrVoie, String separateur, String saisons4, String protege4s, boolean villeMtl, String nomArrVille) {
     this.id = id;

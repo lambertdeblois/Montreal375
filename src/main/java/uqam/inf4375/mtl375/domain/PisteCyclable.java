@@ -1,4 +1,6 @@
-package uqam.inf4375.mtl375.resources;
+package uqam.inf4375.mtl375.domain;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PisteCyclable {
   private String type;
@@ -11,9 +13,9 @@ public class PisteCyclable {
     this.geometry = geometry;
   }
 
-  @JsonProperty("type") public String getType() { return type; }
-  @JsonProperty("properties") public Property getProperty() { return property; }
-  @JsonProperty("geometry") public Geometry getGeometry() { return geometry; }
+  @JsonProperty public String getType() { return type; }
+  @JsonProperty public Property getProperty() { return property; }
+  @JsonProperty public Geometry getGeometry() { return geometry; }
 
   @Override public String toString() {
     return String.format("%s", type); // TODO: print avec geometry et property
