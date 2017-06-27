@@ -23,7 +23,7 @@ public class FetchPistesCyclablesTask {
   private static final String URL = "http://donnees.ville.montreal.qc.ca/dataset/5ea29f40-1b5b-4f34-85b3-7c67088ff536/resource/0dc6612a-be66-406b-b2d9-59c9e1c65ebf/download/reseaucyclable2016dec2016.geojson";
 
   // @Scheduled(cron="0 0 1 */6 *") // à tous les 6 mois.
-  @Scheduled(cron="*/10 * * * * ?") // à toutes les 5 secondes.
+  // @Scheduled(cron="*/10 * * * * ?") // à toutes les 5 secondes.
   public void execute() {
     // TODO: il faut modifier le fichier json pour avoir juste un array d'objets
     Arrays.asList(new RestTemplate().getForObject(URL, FetchPistesCyclables[].class)).stream()
