@@ -1,0 +1,104 @@
+Fonctionnalités
+Module A
+(5 XP) Le système doit contenir un script d'importation de certaines activités présentées dans le cadre
+  de l'anniversaire du 375e de la Ville de Montréal (fichier JSON fourni). Les données sont désérialisées
+  et sauvegardées dans une base de données PostgreSQL.
+ Les coordonnées GPS doivent être sauvegardées dans une colonne de type "geometry"
+  ou "geography" (requiert l'extension PostGIS).
+(8 XP; remplace A1), Au lieu d'utiliser le fichier JSON fourni, le système récupère la liste des activités
+  du 375e à toutes les semaines. Le système doit trouver les coordonnées GPS de chaque activité en utilisant
+  un service de géocodage (p.e. l'API de Google Maps). Le système doit respecter les limites d'utilisation
+  du service de gécodage (p.e. Google Maps limite l'utilisation gratuite à 50 requêtes/sec et 2500 requêtes/jour).
+ Les activités sans coordonnées GPS n'ont pas à être importées dans le système.
+ Les données sont désérialisées et sauvegardées dans une base de données PostgreSQL.
+ Les coordonnées GPS doivent être sauvegardées dans une colonne de type "geometry" ou "geography" (requiert l'extension PostGIS).
+(5 XP; requiert A1 ou A2) Un API HTTP/JSON permet de rechercher les activités qui se trouvent dans un
+ certain rayon exprimé en mètres (valeur par défaut: 5000m) centré sur un point exprimé en latitute
+ et longitude (valeurs par défaut: les coordonnées du pavillon PK). Il est aussi possible d'indiquer
+ une plage de dates (par défaut: entre aujourd'hui et demain)
+ p.e. GET /activites-375e?du=2017-04-01&au=2017-04-15&rayon=3000&lat=45.123&lng=-73.123.
+ Si aucun rayon et aucune coordonnées GPS n'ont été données, le système ne doit pas appliquer
+  les valeurs par défaut associées à ces valeurs. Si aucune date n'a été donnée,
+  le système ne doit pas appliquer les valeurs par défaut associées à ces valeurs.
+ L'API doit générer les codes de statuts et le contenu approprié selon le type de valeur de retour ou d'erreur
+ (p.e. des dates inversées, des coordonnées GPS invalides, etc.)
+(5 XP; requiert A3) L'API HTTP/JSON permet d'ajouter des activités (POST /activites-375e) de mettre à jour des
+  activités (PUT /activites-375e/:id) et de supprimer des activités (DELETE /activites-375e/:id).
+ L'API doit générer les codes de statuts et le contenu approprié selon le type de valeur de retour ou d'erreur.
+ Tous les appels de l'API REST (incluant la recherche) sont documentés dans un document au format RAML.
+
+Module B
+(5 XP; requiert A3) Le système est doté d'une interface web de type Ajax. Un formulaire HTML permet de saisir deux dates
+  et de faire une recherche parmi les activités en utilisant l'API développée dans le module A.
+ La liste d'activités retournées par l'API est alors affichées dynamiquement dans la page web (application Ajax).
+ L'interface doit gérer les codes d'erreurs retournés par l'API en affichant un message d'erreur HTML à l'utilisateur.
+(5 XP; requiert B1) En plus du formulaire de recherche et de la liste de résultats, l'interface web contient une carte
+  interactive de type Google Maps. Les résultats sont affichés dynamiquement sur la carte.
+ La carte doit se recentrer automatiquement afin d'inclure tous les résultats de recherche.
+ Les coordonnées GPS utilisées pour la recherche sont celles du centre de la carte visible (le "viewport" de la carte).
+ Lorsque l'utilisateur clique sur un item de la liste de résultats de recherche,
+  la carte doit se recentrer automatiquement sur cette activité.
+(5 XP; requiert A4 et B1) L'interface web de type Ajax contient un formulaire permettant de créer des
+  activités et de les modifier. Il est aussi possible de les supprimer.
+ L'affichage de la liste d'activités (et la carte si B2 a été réalisé) sont dynamiquement mis à jour.
+ Toute erreur retournée par l'API est gérée par l'interface avec un message d'erreur approprié.
+(2 XP; requiert B2) Chaque marqueur représentant une activité sur la carte doit être accompagné d'une bulle explicative
+  (un pop-up) contenant le nom de l'activité, sa description, ses dates et le nom de son lieu.
+ Le pop-up apparait lorsque l'utilisateur clique sur le marqueur.
+
+Module C
+(5 XP) Le système récupère l'état des stations Bixi à toutes les 10 minutes.
+ Les données sont désérialisées et sauvegardées dans une base de données PostgreSQL.
+(2 XP; requiert C1) Un API HTTP/JSON de type REST permet d'obtenir l'information pour une station (GET /stations-bixi/:id).
+(5 XP; requiert C1) L'API HTTP/JSON permet de rechercher les stations qui se trouvent dans un rayon
+  exprimé en mètre (valeur par défaut: 1000m) centré sur un point exprimé en latitute et longitude
+  (valeurs par défaut: les coordonnées du pavillon PK).
+ Il est aussi possible d'indiquer le nombre minimal de vélos disponibles par stations (par défaut: 0)
+  p.e. (GET /stations-bixi?min_bixi_dispo=2&rayon=200&lat=45.123&lng=-73.123).
+ L'appel de l'API REST est documenté dans un document au format RAML.
+(5 XP; requiert B2, C2 et C3) Lorsque l'utilisateur clique sur un marqueur d'activité dans l'interface web,
+  les stations bixis dans un rayon de 500m de l'activité sont affichées sur la carte.
+ Chaque marqueur représentant une station bixi doit être accompagné d'une bulle explicative contenant
+  le nombre de bixis et de places disponibles à cette station. L'appel Ajax à l'API de recherche de
+  stations bixi doit se faire uniquement lors du clic sur le marqueur de la carte.
+
+Module D
+(5 XP) Le système récupère les tracés des pistes cyclables de Montréal à tous les 6 mois.
+ Les données sont désérialisées et sauvegardées dans une base de données PostgreSQL.
+(10 XP; requiert D1) Un API HTTP/JSON de type REST permet de rechercher les pistes cyclables qui croisent
+  un point exprimé en coordonnées GPS dans un rayon (valeur par défaut 200m)
+  p.e. GET /pistes-cyclables?rayon=200&lat=45.123&lng=-73.123.
+ L'appel de l'API REST est documenté dans un document au format RAML.
+(5 XP; requiert B2 et D2) Lorsque l'utilisateur clique sur un marqueur d'activité dans l'interface web,
+  les pistes cyclables à proximités (c.-à-d. à l'intérieur de 200m de l'activité) sont affichés sur la carte.
+ L'appel Ajax à l'API doit se faire uniquement lors du clic sur le marqueur de la carte.
+
+Module E
+(10 XP; requiert A3 et C3) Le système doit être convertit en un ensemble de microservices.
+ Un service doit servir de BFF (Backend For Frontend) pour l'application web.
+ Les autres APIs (A3, C3 et possiblement A4 et D2) doivent être convertis en autant
+ de microservices: un service d'activités du 375e, un service de stations Bixi et
+ un service de pistes cyclables (si réalisé)
+(5 XP; requiert E1) Les appels aux différents microservices doivent être réalisés en respectant
+ le patron de conception Circuit Breaker. De plus, la gestion des erreurs devrait faire un sorte
+ que les appels en erreurs seront journalisés et que le système dans son ensemble pourra continuer d'assurer un service réduit.
+(10 XP; requiert E2) L'un des microservices (Bixi, activités du 375e ou pistes cyclables) doit être réécrit avec Node.js et Express.
+
+Module F
+(5 XP; requiert B2) Les utilisateurs du système peuvent se créer un compte.
+ L'authentification doit être faite avec l'API d'une tierce partie utilisant OAuth ou OAuth2
+  (p.e. Login with Facebook, Login with Twitter, Login with Github ou Login with Google)
+(8 XP; requiert B2) Un utilisateur peut gérer ses activités "préférées" auxquelles il souhaite participer
+  à partir de l'application Ajax (c.-à-d. afficher toutes les activités préférées,
+   ajouter et retirer une activité à sa liste d'activités préférées).
+ Si F1 est implémentée, chaque utilisateur a une liste d'activité différente.
+ Des API  HTTP/JSON de style "REST" doivent être ajoutées en conséquences
+  p.e. GET /activites-375/preferees, PUT /activites-375/preferees/:id et DELETE /activites-375/preferees/:id.
+ Tous les appels de l'API REST sont documentés dans un document au format RAML.
+(2 XP; requiert F2) L'utilisateur peut choisir de n'afficher que ses activités
+  préférées lors de la recherche avec la carte.
+(10 XP; requiert F2) Réalisez une seconde version de l'interface graphique avec un
+  des cadres applicatifs JavaScript suivant: React/Redux, Angular ou Ember.
+
+Module G
+(10 XP, requiert A4, B3, B4, C4, D3, E2 et F3) Tout le système est déployé sur la plateforme Heroku.
