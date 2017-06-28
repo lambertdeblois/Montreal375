@@ -30,17 +30,12 @@ public class Activity {
     private ArrayList<String> dates;
     private Place place;
 
-    public Activity() {
-        
-    }
-
     public Activity(int id, String name, String description, String district) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.district = district;
     }
-    
     
     public Activity(int id, String name, String description, String district, ArrayList<String> dates, Place place) {
         this.id = id;
@@ -60,7 +55,7 @@ public class Activity {
     
     @Override
     public String toString(){
-        return String.format("%s\t%s\t%s", name, description, district);
+        return String.format("%s\t%s\t%s\t%s", name, description, district, dates.toString());
     }  
     
 }

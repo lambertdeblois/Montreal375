@@ -24,35 +24,31 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-
-/**
- *
- * @author vincent
- */
 @Component
 public class FetchActivityTask {
-    
-    private ArrayList<Activity> activites;
-    
+       
     private static final Logger log = LoggerFactory.getLogger(FetchActivityTask.class);
     private static final String URL = "http://guillemette.org/uqam/inf4375-e2017/assets/programmation-parcs.json";
     
-    @Scheduled(cron="* * * * * ?")
+    //@Scheduled(cron="0 0 1 * * ?") //At 00:00 on day-of-month 1
+    @Scheduled(cron="*/10 * * * * ?")
     public void execute(){
         log.info("toto");
         Arrays.asList(new RestTemplate().getForObject(URL, FetchActivity[].class)).stream()
           .map(this::asActivity)
           .peek(a -> log.info(a.toString()))
+          .forEach(this::print);
           ;
-        activites.toString();
     }
     
     private Activity asActivity(FetchActivity a){
-        Activity b = new Activity(a.id, a.name, a.description, a.district);
-        activites.add(b);
-        return b;
+        return new Activity(a.id, a.name, a.description, a.district, a.dates, a.place);
     }
     
+    private void print (Activity a){
+        a.toString();
+    }
+        
 }
 
 class FetchActivity{
@@ -60,6 +56,6 @@ class FetchActivity{
     @JsonProperty("nom") String name;
     @JsonProperty("description") String description;
     @JsonProperty("arrondissement") String district;
-//    @JsonProperty("dates") ArrayList<String> dates;
-//    @JsonProperty("lieu") Place place;
+    @JsonProperty("dates") ArrayList<String> dates;
+    @JsonProperty("lieu") Place place;
 }
