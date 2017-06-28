@@ -19,7 +19,7 @@ public class StationBixi {
         this.nbEmptyDocks = nbEmptyDocks;
     }
 
-    @JsonProperty public int getId() { return id; }
+    public int getId() { return id; }
     @JsonProperty public String getName() { return name; }
     @JsonProperty public float getLat() { return lat; }
     @JsonProperty public float getLongueur() { return longueur; }

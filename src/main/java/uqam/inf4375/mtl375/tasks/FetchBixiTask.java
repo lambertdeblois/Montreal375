@@ -13,10 +13,12 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.scheduling.annotation.*;
 import org.springframework.web.client.*;
+import org.springframework.util.FileCopyUtils;
 
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
+import java.nio.charset.StandardCharsets;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
@@ -35,15 +37,21 @@ public class FetchBixiTask {
 
 
   // @Scheduled(cron="*/10 * * * *") // à toutes les 10 minutes.
-    @Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
+    @Scheduled(cron="*/5 * * * * ?") // à toutes les 10 secondes.
     public void execute() {
+        String string = "";
         try {
             URL url = new URL(URL);
             URLConnection conn = url.openConnection();
             InputStream is = conn.getInputStream();
-            System.out.println(is);
+            string = new String(FileCopyUtils.copyToByteArray(is), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println("fuck");
         }
+        File file = new File(string);
+        string = string.substring(string.indexOf("<station>"));
+        String[] listeStation = string.split("</station><station>");
+
+        System.out.println(listeStation[0]);
   }
 }
