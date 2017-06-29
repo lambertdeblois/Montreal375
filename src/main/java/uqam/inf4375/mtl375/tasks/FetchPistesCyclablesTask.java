@@ -6,42 +6,68 @@ import java.util.*;
 import java.util.stream.*;
 
 import com.fasterxml.jackson.annotation.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.jsoup.*;
 import org.slf4j.*;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.scheduling.annotation.*;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.client.*;
 
 @Component
 public class FetchPistesCyclablesTask {
 
-  private ArrayList<PisteCyclable> pistesCyclables;
+    private ArrayList<PisteCyclable> pistesCyclables;
 
-  private static final Logger log = LoggerFactory.getLogger(FetchPistesCyclablesTask.class);
-  private static final String URL = "http://donnees.ville.montreal.qc.ca/dataset/5ea29f40-1b5b-4f34-85b3-7c67088ff536/resource/0dc6612a-be66-406b-b2d9-59c9e1c65ebf/download/reseaucyclable2016dec2016.geojson";
+    private static final Logger log = LoggerFactory.getLogger(FetchPistesCyclablesTask.class);
+    private static final String URL = "http://donnees.ville.montreal.qc.ca/dataset/5ea29f40-1b5b-4f34-85b3-7c67088ff536/resource/0dc6612a-be66-406b-b2d9-59c9e1c65ebf/download/reseaucyclable2016dec2016.geojson";
 
-  // @Scheduled(cron="0 0 1 */6 *") // à tous les 6 mois.
-  // @Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
-  public void execute() {
-    // TODO: il faut modifier le fichier json pour avoir juste un array d'objets
-    Arrays.asList(new RestTemplate().getForObject(URL, FetchPistesCyclables[].class)).stream()
-      .map(this::asPisteCyclable)
-      .peek(c -> log.info(c.toString()))
-      ;
-      pistesCyclables.toString();
-  }
-
-  private PisteCyclable asPisteCyclable(FetchPistesCyclables a){
-        PisteCyclable b = new PisteCyclable(a.type, a.property, a.geometry);
-        pistesCyclables.add(b);
-        return b;
+    // @Scheduled(cron="0 0 1 */6 *") // à tous les 6 mois.
+    // @Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
+    public void execute() {
+        String jsonString = "";
+        try {
+            URL url = new URL(URL);
+            URLConnection conn = url.openConnection();
+            InputStream is = conn.getInputStream();
+            jsonString = new String(FileCopyUtils.copyToByteArray(is), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            System.out.println("fuck");
+        }        
+        jsonString = jsonString.substring(jsonString.indexOf("features") + 12); //p-e 11 (pour enlever le [ )
+        String[] listePistes = jsonString.split("},{"); // spliter a la fin d'un objet,debut objet
+        System.out.println(listePistes[0]);
+        PisteCyclable pisteCyclable = stringToPiste(listePistes[0]);
+        System.out.println(pisteCyclable);
     }
-}
 
-class FetchPistesCyclables {
-  @JsonProperty("type") String type;
-  @JsonProperty("properties") Property property;
-  @JsonProperty("geometry") Geometry geometry;
+    public PisteCyclable stringToPiste(String jsonString) {
+        Pattern patternId = Pattern.compile("<id>([0-9]*)</id>");
+        float id = Float.parseFloat(valueMatcher(patternId, jsonString));
+        
+        Pattern patternType = Pattern.compile(":{\"type\":\"([A-Za-z]*)\",");
+        String type = valueMatcher(patternType, jsonString);
+        if (type.equals("MultiLineString")) {
+            
+        }else{
+            // Pattern patternCoor = Pattern.compile("coordinates\":\[(\[[0-9\.,\]\S]*)");
+        }
+
+        return new PisteCyclable();
+    }
+
+    public String valueMatcher(Pattern pattern, String xmlString) {
+        Matcher matcher = pattern.matcher(xmlString);
+        matcher.find();
+        return matcher.group(1);
+    }
 }
