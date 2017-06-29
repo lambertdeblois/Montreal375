@@ -10,6 +10,10 @@ public class StationBixi {
     private int nbBikes;
     private int nbEmptyDocks;
 
+    public StationBixi() {
+        
+    }
+    
     public StationBixi(int id, String name, float lat, float longueur, int nbBikes, int nbEmptyDocks) {
         this.id = id;
         this.name = name;
