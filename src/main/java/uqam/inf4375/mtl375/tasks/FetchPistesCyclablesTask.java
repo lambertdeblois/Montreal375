@@ -42,7 +42,7 @@ public class FetchPistesCyclablesTask {
             jsonString = new String(FileCopyUtils.copyToByteArray(is), StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("fuck");
-        }        
+        }
         jsonString = jsonString.substring(jsonString.indexOf("features") + 12); //p-e 11 (pour enlever le [ )
         String[] listePistes = jsonString.split("},{"); // spliter a la fin d'un objet,debut objet
         System.out.println(listePistes[0]);
@@ -51,18 +51,40 @@ public class FetchPistesCyclablesTask {
     }
 
     public PisteCyclable stringToPiste(String jsonString) {
-        Pattern patternId = Pattern.compile("<id>([0-9]*)</id>");
-        float id = Float.parseFloat(valueMatcher(patternId, jsonString));
-        
-        Pattern patternType = Pattern.compile(":{\"type\":\"([A-Za-z]*)\",");
-        String type = valueMatcher(patternType, jsonString);
-        if (type.equals("MultiLineString")) {
-            
-        }else{
-            // Pattern patternCoor = Pattern.compile("coordinates\":\[(\[[0-9\.,\]\S]*)");
-        }
+        Pattern pId = Pattern.compile("<id>([0-9]*)</id>");
+        float id = Float.parseFloat(valueMatcher(pId, jsonString));
 
-        return new PisteCyclable();
+        Pattern pType = Pattern.compile(":{\"type\":\"([A-Za-z]*)\",");
+        String type = valueMatcher(pType, jsonString);
+
+        Pattern pCoor = Pattern.compile("coordinates\":([0-9\\[\\],\\. ]*)");
+        String coordinates = valueMatcher(pCoor, jsonString);
+        
+        // a tester (remplissage des coordonees)
+        float[][][] tCoordinates = null;
+        if (type.equals("MultiLineString")) {
+            String[] lCoordinates = coordinates.split(("]],[["));
+            for (int i = 0; i < lCoordinates.length; i++) {
+                Pattern pLineString = Pattern.compile("\\[([0-9]+\\.[0-9]+), ?([0-9]+\\.[0-9]+)\\]");
+                Matcher mLineString = pLineString.matcher(lCoordinates[i]);
+                int j = 0;
+                while (mLineString.find()) {
+                    tCoordinates[i][j][0] = Float.parseFloat(mLineString.group(j + 1));
+                    tCoordinates[i][j][1] = Float.parseFloat(mLineString.group(j + 2));
+                    j++;
+                }
+            }
+        } else {
+            Pattern pLineString = Pattern.compile("\\[([0-9]+\\.[0-9]+), ?([0-9]+\\.[0-9]+)\\]");
+            Matcher mLineString = pLineString.matcher(coordinates);
+            int i = 0;
+            while (mLineString.find()) {
+                tCoordinates[0][i][0] = Float.parseFloat(mLineString.group(i + 1));
+                tCoordinates[0][i][1] = Float.parseFloat(mLineString.group(i + 2));
+                i++;
+            }
+        }                
+        return new PisteCyclable(id, new Geometry(type, tCoordinates));
     }
 
     public String valueMatcher(Pattern pattern, String xmlString) {
