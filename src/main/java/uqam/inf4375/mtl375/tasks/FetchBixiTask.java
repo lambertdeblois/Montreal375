@@ -47,14 +47,16 @@ public class FetchBixiTask {
             xmlString = new String(FileCopyUtils.copyToByteArray(is), StandardCharsets.UTF_8);
         } catch (IOException e) {
             System.out.println("fuck");
-        }        
+        }
         xmlString = xmlString.substring(xmlString.indexOf("<station>") + 9);
         String[] listeStation = xmlString.split("</station><station>");
-        System.out.println(listeStation[listeStation.length]);
-//        checker la fin du string
-        System.out.println(listeStation[0]);
-        StationBixi station = stringToStation(listeStation[0]);
-        System.out.println(station);
+
+        List<StationBixi> lStations = new ArrayList<StationBixi>();
+        for (String station: listeStation){
+          lStations.add(stringToStation(station));
+
+        }
+
     }
 
     public StationBixi stringToStation(String xmlString) {
