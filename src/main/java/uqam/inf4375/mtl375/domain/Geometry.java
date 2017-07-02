@@ -1,20 +1,22 @@
 package uqam.inf4375.mtl375.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.*;
 
 public class Geometry {
   private String type;
-  private float[][][] coordinates;
+  private ArrayList<ArrayList<ArrayList<Double>>> coordinates;
 
-  public Geometry(String type, float[][][] coordinates) {
+  public Geometry(String type, ArrayList<ArrayList<ArrayList<Double>>> coordinates) {
     this.type = type;
     this.coordinates = coordinates;
   }
 
   @JsonProperty public String getType() { return type; }
-  @JsonProperty public float[][][] getCoordinates() { return coordinates; }
+  @JsonProperty public ArrayList<ArrayList<ArrayList<Double>>> getCoordinates() { return coordinates; }
 
   @Override public String toString() {
-    return String.format("%s", type); // TODO: print coordinates
+    System.out.print(coordinates);
+    return String.format("\n%s", type); // TODO: print coordinates
   }
 }

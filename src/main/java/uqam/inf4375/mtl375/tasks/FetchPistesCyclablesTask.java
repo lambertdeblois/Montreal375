@@ -32,7 +32,7 @@ public class FetchPistesCyclablesTask {
     private static final String URL = "http://donnees.ville.montreal.qc.ca/dataset/5ea29f40-1b5b-4f34-85b3-7c67088ff536/resource/0dc6612a-be66-406b-b2d9-59c9e1c65ebf/download/reseaucyclable2016dec2016.geojson";
 
     // @Scheduled(cron="0 0 1 */6 *") // à tous les 6 mois.
-    // @Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
+    @Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
     public void execute() {
         String jsonString = "";
         try {
@@ -43,25 +43,28 @@ public class FetchPistesCyclablesTask {
         } catch (IOException e) {
             System.out.println("fuck");
         }
-        jsonString = jsonString.substring(jsonString.indexOf("features") + 12); //p-e 11 (pour enlever le [ )
-        String[] listePistes = jsonString.split("},{"); // spliter a la fin d'un objet,debut objet
-        System.out.println(listePistes[0]);
-        PisteCyclable pisteCyclable = stringToPiste(listePistes[0]);
-        System.out.println(pisteCyclable);
+        jsonString = jsonString.substring(jsonString.indexOf("[") + 2); //p-e 11 (pour enlever le [ )
+        String[] listePistes = jsonString.split("\\} \\},"); // spliter a la fin d'un objet,debut objet
+        List<PisteCyclable> lPistes = new ArrayList<PisteCyclable>();
+        for (String piste : listePistes) {
+            lPistes.add(stringToPiste(piste));
+        }
+        System.out.println(lPistes);
     }
 
     public PisteCyclable stringToPiste(String jsonString) {
-        Pattern pId = Pattern.compile("<id>([0-9]*)</id>");
-        float id = Float.parseFloat(valueMatcher(pId, jsonString));
+        Pattern pId = Pattern.compile("\"ID\": ([0-9]*\\.[0-9]*)");
+        double id = Double.parseDouble(valueMatcher(pId, jsonString));
 
-        Pattern pType = Pattern.compile(":{\"type\":\"([A-Za-z]*)\",");
+        Pattern pType = Pattern.compile("geometry\": \\{ \"type\": \"([A-Za-z]*)");
         String type = valueMatcher(pType, jsonString);
 
         Pattern pCoor = Pattern.compile("coordinates\":([0-9\\[\\],\\. ]*)");
         String coordinates = valueMatcher(pCoor, jsonString);
-        
         // a tester (remplissage des coordonees)
-        float[][][] tCoordinates = null;
+
+        ArrayList<ArrayList<ArrayList<Double>>> lllDouble = new ArrayList<ArrayList<ArrayList<Double>>>();
+        // float[][][] tCoordinates = null;
         if (type.equals("MultiLineString")) {
             String[] lCoordinates = coordinates.split(("]],[["));
             for (int i = 0; i < lCoordinates.length; i++) {
@@ -69,22 +72,27 @@ public class FetchPistesCyclablesTask {
                 Matcher mLineString = pLineString.matcher(lCoordinates[i]);
                 int j = 0;
                 while (mLineString.find()) {
-                    tCoordinates[i][j][0] = Float.parseFloat(mLineString.group(j + 1));
-                    tCoordinates[i][j][1] = Float.parseFloat(mLineString.group(j + 2));
+                    // tCoordinates[i][j][0] = Double.parseDouble(mLineString.group(j + 1));
+                    // tCoordinates[i][j][1] = Double.parseDouble(mLineString.group(j + 2));
                     j++;
                 }
             }
         } else {
-            Pattern pLineString = Pattern.compile("\\[([0-9]+\\.[0-9]+), ?([0-9]+\\.[0-9]+)\\]");
+            Pattern pLineString = Pattern.compile(" ([0-9]*\\.[0-9]*), ([0-9]*\\.[0-9]*) ");
             Matcher mLineString = pLineString.matcher(coordinates);
+
             int i = 0;
+            ArrayList<ArrayList<Double>> llDouble = new ArrayList<ArrayList<Double>>();
             while (mLineString.find()) {
-                tCoordinates[0][i][0] = Float.parseFloat(mLineString.group(i + 1));
-                tCoordinates[0][i][1] = Float.parseFloat(mLineString.group(i + 2));
+                ArrayList<Double> lDouble = new ArrayList<Double>();
+                lDouble.add(Double.parseDouble(mLineString.group(1)));
+                lDouble.add(Double.parseDouble(mLineString.group(2)));
+                llDouble.add(lDouble);
                 i++;
             }
-        }                
-        return new PisteCyclable(id, new Geometry(type, tCoordinates));
+            lllDouble.add(llDouble);
+        }
+        return new PisteCyclable(id, new Geometry(type, lllDouble));
     }
 
     public String valueMatcher(Pattern pattern, String xmlString) {
