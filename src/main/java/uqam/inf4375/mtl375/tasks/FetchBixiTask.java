@@ -1,6 +1,7 @@
 package uqam.inf4375.mtl375.tasks;
 
 import uqam.inf4375.mtl375.domain.*;
+import uqam.inf4375.mtl375.repositories.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -36,6 +37,8 @@ public class FetchBixiTask {
     private static final Logger log = LoggerFactory.getLogger(FetchBixiTask.class);
     private static final String URL = "https://montreal.bixi.com/data/bikeStations.xml";
 
+    @Autowired private StationBixiRepository repository;
+
     // @Scheduled(cron="*/10 * * * *") // à toutes les 10 minutes.
     @Scheduled(cron = "*/5 * * * * ?") // à toutes les 10 secondes.
     public void execute() {
@@ -51,12 +54,12 @@ public class FetchBixiTask {
         xmlString = xmlString.substring(xmlString.indexOf("<station>") + 9);
         String[] listeStation = xmlString.split("</station><station>");
 
-        List<StationBixi> lStations = new ArrayList<StationBixi>();
+        // List<StationBixi> lStations = new ArrayList<StationBixi>();
         for (String station: listeStation){
-          lStations.add(stringToStation(station));
-
+          // lStations.add(stringToStation(station));
+          repository.insert(stringToStation(station));
         }
-
+        System.out.println(repository.findAll());
     }
 
     public StationBixi stringToStation(String xmlString) {

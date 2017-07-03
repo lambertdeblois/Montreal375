@@ -11,9 +11,9 @@ public class StationBixi {
     private int nbEmptyDocks;
 
     public StationBixi() {
-        
+
     }
-    
+
     public StationBixi(int id, String name, float lat, float longueur, int nbBikes, int nbEmptyDocks) {
         this.id = id;
         this.name = name;
@@ -23,7 +23,7 @@ public class StationBixi {
         this.nbEmptyDocks = nbEmptyDocks;
     }
 
-    public int getId() { return id; }
+    @JsonProperty public int getId() { return id; }
     @JsonProperty public String getName() { return name; }
     @JsonProperty public float getLat() { return lat; }
     @JsonProperty public float getLongueur() { return longueur; }
