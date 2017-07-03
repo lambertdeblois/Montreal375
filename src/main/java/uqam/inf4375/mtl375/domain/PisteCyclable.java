@@ -18,7 +18,6 @@ public class PisteCyclable {
   @JsonProperty public Geometry getGeometry() { return geometry; }
 
   @Override public String toString() {
-    System.out.print(geometry);
     return String.format(" : %.6f", id); // TODO: print avec geometry
   }
 }

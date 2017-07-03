@@ -16,7 +16,6 @@ public class Geometry {
   @JsonProperty public ArrayList<ArrayList<ArrayList<Double>>> getCoordinates() { return coordinates; }
 
   @Override public String toString() {
-    System.out.print(coordinates);
     return String.format("\n%s", type); // TODO: print coordinates
   }
 }

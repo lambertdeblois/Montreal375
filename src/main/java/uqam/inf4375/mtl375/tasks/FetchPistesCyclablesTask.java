@@ -66,29 +66,29 @@ public class FetchPistesCyclablesTask {
         ArrayList<ArrayList<ArrayList<Double>>> lllDouble = new ArrayList<ArrayList<ArrayList<Double>>>();
         // float[][][] tCoordinates = null;
         if (type.equals("MultiLineString")) {
-            String[] lCoordinates = coordinates.split(("]],[["));
+            String[] lCoordinates = coordinates.split(("\\] \\], \\[ \\["));
             for (int i = 0; i < lCoordinates.length; i++) {
-                Pattern pLineString = Pattern.compile("\\[([0-9]+\\.[0-9]+), ?([0-9]+\\.[0-9]+)\\]");
+                ArrayList<ArrayList<Double>> llDouble = new ArrayList<ArrayList<Double>>();
+                Pattern pLineString = Pattern.compile("([0-9]*\\.[0-9]*), ([0-9]*\\.[0-9]*)");
                 Matcher mLineString = pLineString.matcher(lCoordinates[i]);
-                int j = 0;
                 while (mLineString.find()) {
-                    // tCoordinates[i][j][0] = Double.parseDouble(mLineString.group(j + 1));
-                    // tCoordinates[i][j][1] = Double.parseDouble(mLineString.group(j + 2));
-                    j++;
+                    ArrayList<Double> lDouble = new ArrayList<Double>();
+                    lDouble.add(Double.parseDouble(mLineString.group(1)));
+                    lDouble.add(Double.parseDouble(mLineString.group(2)));
+                    llDouble.add(lDouble);
                 }
+                lllDouble.add(llDouble);
             }
         } else {
-            Pattern pLineString = Pattern.compile(" ([0-9]*\\.[0-9]*), ([0-9]*\\.[0-9]*) ");
+            Pattern pLineString = Pattern.compile("([0-9]*\\.[0-9]*), ([0-9]*\\.[0-9]*)");
             Matcher mLineString = pLineString.matcher(coordinates);
 
-            int i = 0;
             ArrayList<ArrayList<Double>> llDouble = new ArrayList<ArrayList<Double>>();
             while (mLineString.find()) {
                 ArrayList<Double> lDouble = new ArrayList<Double>();
                 lDouble.add(Double.parseDouble(mLineString.group(1)));
                 lDouble.add(Double.parseDouble(mLineString.group(2)));
                 llDouble.add(lDouble);
-                i++;
             }
             lllDouble.add(llDouble);
         }
