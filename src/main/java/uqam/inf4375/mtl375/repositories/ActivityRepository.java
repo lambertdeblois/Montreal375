@@ -24,34 +24,44 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
-
-
-
 @Component
 public class ActivityRepository {
-    @Autowired private JdbcTemplate jdbcTemplate;
-    
-    private static final String INSERT_STMT = 
-            " insert into activites ()"
-        +   " values (?, ?, ?)"
-        +   " on conflict do nothing"
-        ;
-    
-    public int insert(Activity activity){
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    private static final String INSERT_STMT
+            = " insert into activities (id, name, description, district)"
+            + " values (?, ?, ?, ?)"
+            + " on conflict do nothing";
+
+    public int insert(Activity activity) {
         return jdbcTemplate.update(conn -> {
             PreparedStatement ps = conn.prepareStatement(INSERT_STMT);
             ps.setInt(1, activity.getId());
             ps.setString(2, activity.getName());
             ps.setString(3, activity.getDescription());
             ps.setString(4, activity.getDistrict());
-            //TODO add other attributes.
             return ps;
         });
     }
+
+    private static final String FIND_ALL_STMT
+            = "select"
+            + "  id, name, description, district"
+            + "from activities"
+            + "where id = ?"
+            ;
+    
+    public List<Activity> findAll(){
+        return jdbcTemplate.query(FIND_ALL_STMT, new ActivityRowMapper());
+    }
 }
+
 class ActivityRowMapper implements RowMapper<Activity> {
+
     @Override
     public Activity mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return new Activity (rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getString("district"));
+        return new Activity(rs.getInt("id"), rs.getString("name"), rs.getString("description"), rs.getString("district"));
     }
 }

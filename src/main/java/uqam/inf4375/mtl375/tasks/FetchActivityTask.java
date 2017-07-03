@@ -20,9 +20,11 @@ import uqam.inf4375.mtl375.domain.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.*;
 import org.slf4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import uqam.inf4375.mtl375.repositories.ActivityRepository;
 
 @Component
 public class FetchActivityTask {
@@ -30,14 +32,14 @@ public class FetchActivityTask {
     private static final Logger log = LoggerFactory.getLogger(FetchActivityTask.class);
     private static final String URL = "http://guillemette.org/uqam/inf4375-e2017/assets/programmation-parcs.json";
     
-    //@Scheduled(cron="0 0 1 * * ?") //At 00:00 on day-of-month 1
-    @Scheduled(cron="*/10 * * * * ?")
+    @Autowired private ActivityRepository repository;
+    
+    //@Scheduled(cron="*/10 * * * * ?")
     public void execute(){
-        log.info("toto");
         Arrays.asList(new RestTemplate().getForObject(URL, FetchActivity[].class)).stream()
           .map(this::asActivity)
           .peek(a -> log.info(a.toString()))
-          .forEach(this::print);
+          .forEach(repository::insert);
           ;
     }
     

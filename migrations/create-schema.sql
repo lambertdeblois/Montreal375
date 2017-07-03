@@ -1,5 +1,6 @@
-create table citations (
+create table activities (
     id int primary key
-  , auteur text
-  , contenu text
+  , name text
+  , description text
+  , district text
 );
