@@ -1,5 +1,5 @@
-create table citations (
-    id int primary key
-  , auteur text
-  , contenu text
+drop table pistecyclable;
+create table pistecyclable (
+    id double precision primary key
+  , location geometry
 );
