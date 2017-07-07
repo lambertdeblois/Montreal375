@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class StationBixi {
     private int id;
     private String name;
-    private float lat;
-    private float longueur;
+    private double lat;
+    private double longueur;
     private int nbBikes;
     private int nbEmptyDocks;
 
@@ -14,7 +14,7 @@ public class StationBixi {
 
     }
 
-    public StationBixi(int id, String name, float lat, float longueur, int nbBikes, int nbEmptyDocks) {
+    public StationBixi(int id, String name, double lat, double longueur, int nbBikes, int nbEmptyDocks) {
         this.id = id;
         this.name = name;
         this.lat = lat;
@@ -25,8 +25,8 @@ public class StationBixi {
 
     @JsonProperty public int getId() { return id; }
     @JsonProperty public String getName() { return name; }
-    @JsonProperty public float getLat() { return lat; }
-    @JsonProperty public float getLongueur() { return longueur; }
+    @JsonProperty public double getLat() { return lat; }
+    @JsonProperty public double getLongueur() { return longueur; }
     @JsonProperty public int getNbBikes() { return nbBikes; }
     @JsonProperty public int getNbEmptyDocks() { return nbEmptyDocks; }
 
