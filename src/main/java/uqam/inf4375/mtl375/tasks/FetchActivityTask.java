@@ -19,7 +19,6 @@ import uqam.inf4375.mtl375.domain.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Arrays;
-import org.jsoup.*;
 import java.sql.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +47,7 @@ public class FetchActivityTask {
 
     private Activity asActivity(FetchActivity a){
         Place place = new Place(a.place.nom, a.place.latitude, a.place.longitude);
-        return new Activity(a.id, Jsoup.parse(a.name).text(), Jsoup.parse(a.description).text(), Jsoup.parse(a.district).text(), a.dates, place);
+        return new Activity(a.id, a.name, a.description, a.district, a.dates, place);
     }
 }
 
