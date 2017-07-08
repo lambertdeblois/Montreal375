@@ -17,6 +17,7 @@ package uqam.inf4375.mtl375.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
+import java.sql.Date;
 
 /**
  *
@@ -27,17 +28,11 @@ public class Activity {
     private String name;
     private String description;
     private String district;
-    private ArrayList<String> dates;
+    private Date[] dates;
     private Place place;
 
-    public Activity(int id, String name, String description, String district) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.district = district;
-    }
-    
-    public Activity(int id, String name, String description, String district, ArrayList<String> dates, Place place) {
+
+    public Activity(int id, String name, String description, String district, Date[] dates, Place place) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -45,17 +40,17 @@ public class Activity {
         this.dates = dates;
         this.place = place;
     }
-    
+
     @JsonProperty public int getId() { return id; }
     @JsonProperty public String getName() { return name; }
     @JsonProperty public String getDescription() { return description; }
     @JsonProperty public String getDistrict() { return district; }
-    @JsonProperty public ArrayList<String> getDates() { return dates; }
+    @JsonProperty public Date[] getDates() { return dates; }
     @JsonProperty public Place getPlace() { return place; }
-    
+
     @Override
     public String toString(){
-        return String.format("%s\t%s\t%s\t%s", name, description, district, dates.toString());
-    }  
-    
+        return String.format("%s : %s", name, district);
+    }
+
 }

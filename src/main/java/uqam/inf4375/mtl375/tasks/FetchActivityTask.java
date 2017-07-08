@@ -18,7 +18,9 @@ package uqam.inf4375.mtl375.tasks;
 import uqam.inf4375.mtl375.domain.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.*;
+import java.util.Arrays;
+import org.jsoup.*;
+import java.sql.*;
 import org.slf4j.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -28,13 +30,14 @@ import uqam.inf4375.mtl375.repositories.ActivityRepository;
 
 @Component
 public class FetchActivityTask {
-       
+
     private static final Logger log = LoggerFactory.getLogger(FetchActivityTask.class);
     private static final String URL = "http://guillemette.org/uqam/inf4375-e2017/assets/programmation-parcs.json";
-    
+
     @Autowired private ActivityRepository repository;
-    
+
     //@Scheduled(cron="*/10 * * * * ?")
+    @Scheduled(cron = "*/5 * * * * ?") // à toutes les 5 secondes.
     public void execute(){
         Arrays.asList(new RestTemplate().getForObject(URL, FetchActivity[].class)).stream()
           .map(this::asActivity)
@@ -42,15 +45,11 @@ public class FetchActivityTask {
           .forEach(repository::insert);
           ;
     }
-    
+
     private Activity asActivity(FetchActivity a){
-        return new Activity(a.id, a.name, a.description, a.district, a.dates, a.place);
+        Place place = new Place(a.place.nom, a.place.latitude, a.place.longitude);
+        return new Activity(a.id, Jsoup.parse(a.name).text(), Jsoup.parse(a.description).text(), Jsoup.parse(a.district).text(), a.dates, place);
     }
-    
-    private void print (Activity a){
-        a.toString();
-    }
-        
 }
 
 class FetchActivity{
@@ -58,6 +57,12 @@ class FetchActivity{
     @JsonProperty("nom") String name;
     @JsonProperty("description") String description;
     @JsonProperty("arrondissement") String district;
-    @JsonProperty("dates") ArrayList<String> dates;
-    @JsonProperty("lieu") Place place;
+    @JsonProperty("dates") Date[] dates;
+    @JsonProperty("lieu") FetchPlace place;
+}
+
+class FetchPlace {
+  @JsonProperty("nom") String nom;
+  @JsonProperty("lat") Double latitude;
+  @JsonProperty("lng") Double longitude;
 }
