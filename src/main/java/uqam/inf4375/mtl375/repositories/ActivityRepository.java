@@ -72,6 +72,23 @@ public class ActivityRepository {
         });
     }
 
+    private static final String FIND_ID_STMT = "select * from activities where id=?";
+
+ public Activity findById(int id) {
+     return jdbcTemplate.queryForObject(FIND_ID_STMT, new Object[]{id}, new ActivityRowMapper());
+}
+
+
+private static final String DELETE_ID_STMT = "delete from activities where id=?";
+
+    public int delete(int id) {
+        return jdbcTemplate.update(conn -> {
+            PreparedStatement ps = conn.prepareStatement(DELETE_ID_STMT);
+            ps.setInt(1,id);
+            return ps;
+        });
+}
+
     private static final String FIND_ALL_STMT
             = "select"
             + "  id, name, description, district, dates, nomPlace, lieu"
