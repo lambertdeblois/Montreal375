@@ -59,7 +59,7 @@ public class FetchBixiTask {
           // lStations.add(stringToStation(station));
           repository.insert(stringToStation(station));
         }
-        System.out.println(repository.findAll());
+        //System.out.println(repository.findAll());
     }
 
     public StationBixi stringToStation(String xmlString) {
@@ -70,10 +70,10 @@ public class FetchBixiTask {
         String name = valueMatcher(patternName, xmlString);
 
         Pattern patternLat = Pattern.compile("<lat>(-?[0-9]*.[0-9]*)</lat>");
-        float lat = Float.parseFloat(valueMatcher(patternLat, xmlString));
+        Double lat = Double.parseDouble(valueMatcher(patternLat, xmlString));
 
         Pattern patternLong = Pattern.compile("<long>(-?[0-9]*.[0-9]*)</long>");
-        float longueur = Float.parseFloat(valueMatcher(patternLong, xmlString));
+        Double longueur = Double.parseDouble(valueMatcher(patternLong, xmlString));
 
         Pattern patternNbBikes = Pattern.compile("<nbBikes>([0-9]*)</nbBikes>");
         int nbBikes = Integer.parseInt(valueMatcher(patternNbBikes, xmlString));
@@ -81,7 +81,7 @@ public class FetchBixiTask {
         Pattern patternNbEmptyDocks = Pattern.compile("<nbEmptyDocks>([0-9]*)</nbEmptyDocks>");
         int nbEmptyDocks = Integer.parseInt(valueMatcher(patternNbEmptyDocks, xmlString));
 
-        return new StationBixi(id, name, lat, longueur, nbBikes, nbEmptyDocks);
+        return new StationBixi(id, name, nbBikes, nbEmptyDocks, lat, longueur);
     }
 
     public String valueMatcher(Pattern pattern, String xmlString) {
