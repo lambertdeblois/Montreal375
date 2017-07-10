@@ -21,6 +21,13 @@ version: 1
                                 }
                 404:
                     description: L'activité n'existe pas.
+                    body:
+                        application/json:
+                            schema:
+                                {
+                                    "status code": 404,
+                                    "reponse": "no activity"
+                                }
 
         put:
             description: Met à jour une activité selon son identifiant.
@@ -48,7 +55,7 @@ version: 1
                         {
                             "status code": 200,
                             "reponse": "ok",
-                            "activite": activity
+                            "activite": [activity]
                         }
             404:
                 description: Aucune activité ne correspond aux critères.
@@ -95,7 +102,13 @@ version: 1
                   }
           404:
             description: L'identifiant spécifié n'existe pas.
-
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 404,
+                            "reponse": "aucune station"                           
+                        }
     get:
     description: Fournir l'information de stations qui correspondent aux critères.
     responses:
@@ -109,8 +122,24 @@ version: 1
                             "reponse": "ok",
                             "stations": [stations]
                         }
+        400:
+            description: Un paramètre n'est pas valide.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 400,
+                            "reponse": "message erreur correspondant"
+                        }
         404:
             description: Aucune station ne correspond aux critères.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 404,
+                            "reponse": "aucune station trouvée"
+                        }
                 
  /pistes
     get:
@@ -128,3 +157,10 @@ version: 1
                         }
         404:
             description: Aucune pistes ne correspond aux critères.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 404,
+                            "reponse": "aucune piste trouvée"
+                        }

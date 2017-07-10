@@ -46,7 +46,6 @@ public class StationBixiController {
         } else {
             response.put("status code", 404);
             response.put("reponse", "pas ok");
-            response.put("stations", null);
         }
         return response;
     }
