@@ -9,4 +9,6 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 }).addTo(mymap);
 
 
-//https://github.com/github/fetch#read-this-first
+//https://github.com/github/fetch#read-this-first  pour faire un appel a une route (ajax) fetch
+//https://github.com/Morriar/INF4375-http-tester   pour faire un appel a une route (ajax) fetch
+//https://github.com/Morriar/INF4375-jsonschema/blob/master/exercice1.js   pour valider json schema
