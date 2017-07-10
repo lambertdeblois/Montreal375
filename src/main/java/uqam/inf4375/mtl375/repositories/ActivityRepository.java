@@ -21,6 +21,7 @@ import java.util.stream.*;
 import java.sql.*;
 
 import java.sql.Array;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -97,6 +98,43 @@ private static final String DELETE_ID_STMT = "delete from activities where id=?"
 
     public List<Activity> findAll(){
         return jdbcTemplate.query(FIND_ALL_STMT, new ActivityRowMapper());
+    }
+    
+    private static final String FIND_COORD_DATES_STMT = "select * from activities where ? <= all(dates) and ? >= all(dates) and ST_DWithin(, ST_Makepoint(?, ?'), ?)";
+    
+    public List<Activity> findWithCoordDates(Date from, Date to, Double lat, Double longueur, int rayon){        
+        return jdbcTemplate.query(conn -> {
+            PreparedStatement ps = conn.prepareStatement(FIND_COORD_DATES_STMT);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
+            ps.setDouble(3, lat);
+            ps.setDouble(4, longueur);
+            ps.setInt(5, rayon);
+            return ps;
+        }, new ActivityRowMapper());
+    }
+    
+    private static final String FIND_DATES_STMT = "select * from activities where ? <= all(dates) and ? >= all(dates)";
+    
+    public List<Activity> findWithDates(Date from, Date to) {
+        return jdbcTemplate.query(conn -> {
+            PreparedStatement ps = conn.prepareStatement(FIND_COORD_DATES_STMT);
+            ps.setDate(1, from);
+            ps.setDate(2, to);
+            return ps;
+        }, new ActivityRowMapper());
+    }
+    
+    private static final String FIND_COORD_STMT = "select * from activities where ST_DWithin(, ST_Makepoint(?, ?'), ?)";
+    
+    public List<Activity> findWithCoord(Double lat, Double longueur, int rayon){        
+        return jdbcTemplate.query(conn -> {
+            PreparedStatement ps = conn.prepareStatement(FIND_COORD_DATES_STMT);            
+            ps.setDouble(1, lat);
+            ps.setDouble(2, longueur);
+            ps.setInt(3, rayon);
+            return ps;
+        }, new ActivityRowMapper());
     }
 }
 
