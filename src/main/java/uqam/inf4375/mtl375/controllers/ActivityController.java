@@ -60,13 +60,13 @@ public class ActivityController {
                                               @RequestParam(value="to", required=false)String to){
         Map<String, Object> response = new HashMap<String, Object>();
         List<Activity> activities;
-        if (rayon != null && lat != null && longueur != null) {
-            if (lat > -100 && lat < 100 && longueur > -100 && longueur < 100 && rayon > 0){
-                if (from != null && to != null) {
+        if (rayon != null && lat != null && longueur != null) {  //coord exist
+            if (lat > -100 && lat < 100 && longueur > -100 && longueur < 100 && rayon > 0){ // si coord sont bonnes
+                if (from != null && to != null) {  //dates exist
                     //coord, dates
                     Date dFrom = Date.valueOf(from);
                     Date dTo = Date.valueOf(to);
-                    if (dFrom.compareTo(dTo) < 1) {
+                    if (dFrom.compareTo(dTo) < 1) { //si dates sont bonnes
                         activities = repository.findWithCoordDates(dFrom, dTo, lat, longueur, rayon);
                         if (activities.isEmpty()){
                             response.put("status code", 404);
@@ -86,27 +86,27 @@ public class ActivityController {
                         return response;
                    }
                 }
-            } else {
+            } else {  // si coord sont pas bonnes
                 response.put("status code", 400);
                 response.put("message", "coordonnées non valide");
                 return response;
             }
-        } else if (from != null && to != null) {
+        } else if (from != null && to != null) {  //dates exist
                 Date dFrom = Date.valueOf(from);
-                    Date dTo = Date.valueOf(to);
-                    if (dFrom.compareTo(dTo) < 1) {
-                        activities = repository.findWithDates(dFrom, dTo);
-                        if (activities.isEmpty()){
-                            response.put("status code", 404);
-                            response.put("reponse", "aucune activité trouvée");
-                            return response;
-                        }                    
-                    } else {
-                        response.put("status code", 400);
-                        response.put("message", "dates non valide");
+                Date dTo = Date.valueOf(to);
+                if (dFrom.compareTo(dTo) < 1) { //dates bonnes
+                    activities = repository.findWithDates(dFrom, dTo);
+                    if (activities.isEmpty()){
+                        response.put("status code", 404);
+                        response.put("reponse", "aucune activité trouvée");
                         return response;
-                    }
-        } else {
+                    }                    
+                } else {
+                    response.put("status code", 400);
+                    response.put("message", "dates non valide");
+                    return response;
+                }
+        } else { // coord et dates null
                 activities = repository.findAll();
                 if (activities.isEmpty()){
                     response.put("status code", 404);

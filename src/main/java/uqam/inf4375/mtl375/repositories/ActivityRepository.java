@@ -90,17 +90,13 @@ private static final String DELETE_ID_STMT = "delete from activities where id=?"
         });
 }
 
-    private static final String FIND_ALL_STMT
-            = "select"
-            + "  id, name, description, district, dates, nomPlace, lieu"
-            + "from activities"
-            ;
+    private static final String FIND_ALL_STMT = "select * from activities";
 
     public List<Activity> findAll(){
         return jdbcTemplate.query(FIND_ALL_STMT, new ActivityRowMapper());
     }
     
-    private static final String FIND_COORD_DATES_STMT = "select * from activities where ? <= all(dates) and ? >= all(dates) and ST_DWithin(, ST_Makepoint(?, ?'), ?)";
+    private static final String FIND_COORD_DATES_STMT = "select * from activities where ? <= all(dates) and ? >= all(dates) and st_dwithin(lieu, st_makepoint(?, ?), ?)";
     
     public List<Activity> findWithCoordDates(Date from, Date to, Double lat, Double longueur, int rayon){        
         return jdbcTemplate.query(conn -> {
@@ -118,18 +114,18 @@ private static final String DELETE_ID_STMT = "delete from activities where id=?"
     
     public List<Activity> findWithDates(Date from, Date to) {
         return jdbcTemplate.query(conn -> {
-            PreparedStatement ps = conn.prepareStatement(FIND_COORD_DATES_STMT);
+            PreparedStatement ps = conn.prepareStatement(FIND_DATES_STMT);
             ps.setDate(1, from);
             ps.setDate(2, to);
             return ps;
         }, new ActivityRowMapper());
     }
     
-    private static final String FIND_COORD_STMT = "select * from activities where ST_DWithin(, ST_Makepoint(?, ?'), ?)";
+    private static final String FIND_COORD_STMT = "select * from activities where st_dwithin(lieu, st_makepoint(?, ?), ?)";
     
     public List<Activity> findWithCoord(Double lat, Double longueur, int rayon){        
         return jdbcTemplate.query(conn -> {
-            PreparedStatement ps = conn.prepareStatement(FIND_COORD_DATES_STMT);            
+            PreparedStatement ps = conn.prepareStatement(FIND_COORD_STMT);            
             ps.setDouble(1, lat);
             ps.setDouble(2, longueur);
             ps.setInt(3, rayon);
