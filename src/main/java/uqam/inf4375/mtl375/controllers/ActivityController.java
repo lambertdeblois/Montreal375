@@ -51,6 +51,40 @@ public class ActivityController {
       response.put("reponse", "no activity");
       return response;
     }
+    
+    @RequestMapping(value="/activities/{id}", method=RequestMethod.PUT)
+    public Map<String, Object> updateActivity(@RequestBody Activity activity, @PathVariable("id")int id){
+        // valider le json qui rentre par le js avant dappeler la route
+        Map<String, Object> response = new HashMap<>();
+        if (repository.findById(activity.getId()) != null){
+            repository.delete(activity.getId());
+            repository.insert(activity);
+            response.put("status code", 201);
+            response.put("reponse", "activity updated");
+            response.put("activity", activity);
+        } else {
+            response.put("status code", 400);
+            response.put("reponse", "activity does not exist");
+        }
+        return response;
+    }
+    
+    
+    @RequestMapping(value="/activities", method=RequestMethod.POST)
+    public Map<String, Object> addActivity(@RequestBody Activity activite){
+        // valider le json qui rentre par le js avant dappeler la route
+        Map<String, Object> response = new HashMap<>();
+        if(repository.findById(activite.getId()) == null){
+            repository.insert(activite);
+            response.put("status code", 201);
+            response.put("reponse", "activity created");
+
+        } else {
+            response.put("status code", 400);
+            response.put("reponse", "activity already exist");
+        }  
+        return response;
+    }
 
      @RequestMapping(value="/activities", method=RequestMethod.GET)
      public Map<String, Object> getActivities(@RequestParam(value="rayon", required=false) Integer rayon,
