@@ -51,7 +51,7 @@ public class ActivityController {
       response.put("reponse", "no activity");
       return response;
     }
-    
+
     @RequestMapping(value="/activities/{id}", method=RequestMethod.PUT)
     public Map<String, Object> updateActivity(@RequestBody Activity activity, @PathVariable("id")int id){
         // valider le json qui rentre par le js avant dappeler la route
@@ -68,8 +68,8 @@ public class ActivityController {
         }
         return response;
     }
-    
-    
+
+
     @RequestMapping(value="/activities", method=RequestMethod.POST)
     public Map<String, Object> addActivity(@RequestBody Activity activite){
         // valider le json qui rentre par le js avant dappeler la route
@@ -82,7 +82,7 @@ public class ActivityController {
         } else {
             response.put("status code", 400);
             response.put("reponse", "activity already exist");
-        }  
+        }
         return response;
     }
 
@@ -106,7 +106,7 @@ public class ActivityController {
                             response.put("status code", 404);
                             response.put("reponse", "aucune activité trouvée");
                             return response;
-                        }                    
+                        }
                     } else {
                         response.put("status code", 400);
                         response.put("message", "dates non valide");
@@ -134,7 +134,7 @@ public class ActivityController {
                         response.put("status code", 404);
                         response.put("reponse", "aucune activité trouvée");
                         return response;
-                    }                    
+                    }
                 } else {
                     response.put("status code", 400);
                     response.put("message", "dates non valide");
@@ -151,9 +151,9 @@ public class ActivityController {
         response.put("status code", 200);
         response.put("reponse", "ok");
         response.put("activity", activities);
-        
+
         return response;
      }
-    
-     
+
+
 }

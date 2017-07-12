@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.stream.*;
 import java.sql.*;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import java.sql.Array;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -76,7 +77,11 @@ public class ActivityRepository {
     private static final String FIND_ID_STMT = "select * from activities where id=?";
 
  public Activity findById(int id) {
+   try{
      return jdbcTemplate.queryForObject(FIND_ID_STMT, new Object[]{id}, new ActivityRowMapper());
+   } catch (EmptyResultDataAccessException e) {
+     return null;
+   }
 }
 
 
@@ -95,10 +100,10 @@ private static final String DELETE_ID_STMT = "delete from activities where id=?"
     public List<Activity> findAll(){
         return jdbcTemplate.query(FIND_ALL_STMT, new ActivityRowMapper());
     }
-    
+
     private static final String FIND_COORD_DATES_STMT = "select * from activities where ? <= all(dates) and ? >= all(dates) and st_dwithin(lieu, st_makepoint(?, ?), ?)";
-    
-    public List<Activity> findWithCoordDates(Date from, Date to, Double lat, Double longueur, int rayon){        
+
+    public List<Activity> findWithCoordDates(Date from, Date to, Double lat, Double longueur, int rayon){
         return jdbcTemplate.query(conn -> {
             PreparedStatement ps = conn.prepareStatement(FIND_COORD_DATES_STMT);
             ps.setDate(1, from);
@@ -109,9 +114,9 @@ private static final String DELETE_ID_STMT = "delete from activities where id=?"
             return ps;
         }, new ActivityRowMapper());
     }
-    
+
     private static final String FIND_DATES_STMT = "select * from activities where ? <= all(dates) and ? >= all(dates)";
-    
+
     public List<Activity> findWithDates(Date from, Date to) {
         return jdbcTemplate.query(conn -> {
             PreparedStatement ps = conn.prepareStatement(FIND_DATES_STMT);
@@ -120,12 +125,12 @@ private static final String DELETE_ID_STMT = "delete from activities where id=?"
             return ps;
         }, new ActivityRowMapper());
     }
-    
+
     private static final String FIND_COORD_STMT = "select * from activities where st_dwithin(lieu, st_makepoint(?, ?), ?)";
-    
-    public List<Activity> findWithCoord(Double lat, Double longueur, int rayon){        
+
+    public List<Activity> findWithCoord(Double lat, Double longueur, int rayon){
         return jdbcTemplate.query(conn -> {
-            PreparedStatement ps = conn.prepareStatement(FIND_COORD_STMT);            
+            PreparedStatement ps = conn.prepareStatement(FIND_COORD_STMT);
             ps.setDouble(1, lat);
             ps.setDouble(2, longueur);
             ps.setInt(3, rayon);

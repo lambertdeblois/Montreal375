@@ -32,6 +32,9 @@ public class Activity {
     private Place place;
 
 
+    public Activity() {      
+    }
+
     public Activity(int id, String name, String description, String district, Date[] dates, Place place) {
         this.id = id;
         this.name = name;
