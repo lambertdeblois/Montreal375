@@ -4,12 +4,12 @@ drop table activities;
 create extension Postgis;
 
 create table stationbixi (
-    id int primary key,
-    name text,
-    nbBikes int,
-    nbEmptyDocks int,
-    lieu geography(POINT, 4326);
-
+    id int primary key
+  , name text
+  , nbBikes int
+  , nbEmptyDocks int
+  , lieu geography(POINT, 4326)
+);
 
 
 create table activities (
