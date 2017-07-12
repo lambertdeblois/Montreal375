@@ -39,8 +39,8 @@ public class FetchBixiTask {
 
     @Autowired private StationBixiRepository repository;
 
-    // @Scheduled(cron="*/10 * * * *") // à toutes les 10 minutes.
-    @Scheduled(cron = "*/5 * * * * ?") // à toutes les 10 secondes.
+    @Scheduled(cron="*/10 * * * *") // à toutes les 10 minutes.
+    //@Scheduled(cron = "*/5 * * * * ?") // à toutes les 10 secondes.
     public void execute() {
         String xmlString = "";
         try {
@@ -54,12 +54,11 @@ public class FetchBixiTask {
         xmlString = xmlString.substring(xmlString.indexOf("<station>") + 9);
         String[] listeStation = xmlString.split("</station><station>");
 
-        // List<StationBixi> lStations = new ArrayList<StationBixi>();
         for (String station: listeStation){
-          // lStations.add(stringToStation(station));
-          repository.insert(stringToStation(station));
+          StationBixi s = stringToStation(station);
+          repository.insert(s);
+          log.info(s.toString());
         }
-        //System.out.println(repository.findAll());
     }
 
     public StationBixi stringToStation(String xmlString) {
