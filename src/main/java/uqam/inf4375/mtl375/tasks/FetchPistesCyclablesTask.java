@@ -63,6 +63,7 @@ public class FetchPistesCyclablesTask {
         int id = Integer.parseInt(valueMatcher(pId, string));
         System.out.println(id);
         
+        
         // matcher toutes les coordonnees et enlever les 0
         Pattern pCoor = Pattern.compile("<coordinates>([0-9]*\\.[0-9],[0-9]\\.[0-9])");       
         String coord = valueMatcher(pCoor, string);
