@@ -10,10 +10,10 @@
 
 1. Create the database with `psql -U postgres -f migrations/create-database.sql`
 
-2. Create the tables with `psql -U postgres -f migrations/create-schema.sql mtl375` 
+2. Create the tables with `psql -U postgres -f migrations/create-schema.sql mtl375`
 
 ## Compilation and execution
 
 `mvn spring-boot:run`
 
-You can now go to [http://localhost:8080/](http://localhost:8080/)
+You can now go to [http://localhost:8080/](http://localhost:8080/) 
