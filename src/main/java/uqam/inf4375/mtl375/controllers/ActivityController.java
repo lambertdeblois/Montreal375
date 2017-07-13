@@ -144,10 +144,17 @@ public class ActivityController {
                     response.put("message", "dates non valide");
                     return response;
                 }
-        } else { // coord et dates null
+        } else if (from != null || to != null){
                 Date dFrom = new Date(new java.util.Date().getTime());
                 Date dTo = new Date(dFrom.getTime() + 24*60*60*1000);
                 activities = repository.findWithDates(dFrom, dTo);
+                if (activities.isEmpty()){
+                        response.put("status code", 404);
+                        response.put("reponse", "aucune activité trouvée");
+                        return response;  
+                }        
+        } else { // coord et dates null                
+                activities = repository.findAll();
                 if (activities.isEmpty()){
                     response.put("status code", 404);
                     response.put("reponse", "aucune activité trouvée");
