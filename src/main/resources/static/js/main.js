@@ -10,6 +10,7 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 var baseURL = new URL(window.location.origin);
 
 var lMarkerStations = new Array();
+// commit plz
 // https://stackoverflow.com/questions/9912145/leaflet-how-to-find-existing-markers-and-delete-markers
 var markerStations = function(station){
     var marker = L.marker([station.lat, station.longueur]).addTo(mymap);
