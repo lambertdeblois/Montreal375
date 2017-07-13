@@ -18,23 +18,23 @@ public class PisteCyclableRepository {
 
   @Autowired private JdbcTemplate jdbcTemplate;
 
-  private static final String FIND_ALL_STMT = "select id, location from pistecyclable";
+  private static final String FIND_ALL_STMT = "select id, geom from pistecyclable";
 
   public List<PisteCyclable> findAll() {
     return jdbcTemplate.query(FIND_ALL_STMT, new PisteCyclableRowMapper());
   }
 
   private static final String INSERT_STMT =
-      " insert into pistecyclable (id, location)"
-    + " values (?, ?)"
+      " insert into pistecyclable (id, geom)"
+    + " values (?, geography::STGeomFromText(?, 4326))"
     + " on conflict do nothing"
     ;
 
   public int insert(PisteCyclable piste) {
     return jdbcTemplate.update(conn -> {
       PreparedStatement ps = conn.prepareStatement(INSERT_STMT);
-      ps.setDouble(1, piste.getId());
-      (PGgeometry)ps.setObject(2, piste.getGeometry());
+      ps.setInt(1, piste.getId());
+      ps.setString(2, piste.getGeom());
       return ps;
     });
   }
@@ -43,8 +43,8 @@ public class PisteCyclableRepository {
 class PisteCyclableRowMapper implements RowMapper<PisteCyclable> {
   public PisteCyclable mapRow(ResultSet rs, int rowNum) throws SQLException {
     return new PisteCyclable(
-        rs.getDouble("id")
-      , (PGgeometry)rs.getObject("location")
+        rs.getInt("id")
+      , rs.getString("geom")
     );
   }
 }

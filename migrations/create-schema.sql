@@ -1,5 +1,6 @@
 drop table pistecyclable;
+
 create table pistecyclable (
-    id double precision primary key
-  , location geometry
+    id int primary key
+  , geom geometry(LINESTRING, 4326)
 );
