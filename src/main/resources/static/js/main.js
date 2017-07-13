@@ -9,9 +9,36 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 
 var baseURL = new URL(window.location.origin);
 
+var lMarkerStations = new Array();
+// https://stackoverflow.com/questions/9912145/leaflet-how-to-find-existing-markers-and-delete-markers
+var markerStations = function(station){
+    var marker = L.marker([station.lat, station.longueur]).addTo(mymap);
+    lMarkerStations.push(marker);
+    map.addLayer(marker);
+}
+
+var fetchStations = function (url) {
+  fetch(url).then(function(resp) {
+    return resp.json()
+  }).then(function (data) {
+    if (data.stations !== null){
+        data.stations.map(markerStations);
+    }
+  })
+}
+
+function delMarkerStations() {
+for(i=0;i<lMarkerStations.length;i++) {
+    mymap.removeLayer(marker[i]);
+    }  
+}
+
+
 function zoom(latitude, longitude) {
   mymap.panTo([latitude, longitude]);
   mymap.setZoom(13);
+  delMarkerStations();
+  fetchStations( new URL('/stationsBixi?rayon=500&lat='+latitude+'&longueur='+longitude, baseURL));
 }
 
 
