@@ -10,7 +10,7 @@
 
 1. Create the database with `psql -U postgres -f migrations/create-database.sql`
 
-2. Create the tables with `<to-be-determined.sql>` 
+2. Create the tables with `psql -U postgres -f migrations/create-schema.sql mtl375` 
 
 ## Compilation and execution
 
