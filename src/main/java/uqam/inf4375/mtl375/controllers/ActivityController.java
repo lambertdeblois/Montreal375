@@ -94,8 +94,12 @@ public class ActivityController {
                                               @RequestParam(value="to", required=false)String to){
         Map<String, Object> response = new HashMap<String, Object>();
         List<Activity> activities;
-        if (rayon != null && lat != null && longueur != null) {  //coord exist
-            if (lat > -100 && lat < 100 && longueur > -100 && longueur < 100 && rayon > 0){ // si coord sont bonnes
+        // 45.508931, -73.568568 pk
+        if (rayon != null || lat != null || longueur != null) {  //coord exist
+            if (rayon == null) rayon = 5000;
+            if (lat == null) lat = 45.508931;
+            if (longueur == null) longueur = -73.568568;
+            if (lat > 40 && lat < 50 && longueur > -75 && longueur < -70 && rayon > 0){ // si coord sont bonnes
                 if (from != null && to != null) {  //dates exist
                     //coord, dates
                     Date dFrom = Date.valueOf(from);
@@ -141,7 +145,9 @@ public class ActivityController {
                     return response;
                 }
         } else { // coord et dates null
-                activities = repository.findAll();
+                Date dFrom = new Date(new java.util.Date().getTime());
+                Date dTo = new Date(dFrom.getTime() + 24*60*60*1000);
+                activities = repository.findWithDates(dFrom, dTo);
                 if (activities.isEmpty()){
                     response.put("status code", 404);
                     response.put("reponse", "aucune activité trouvée");
