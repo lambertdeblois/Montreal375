@@ -13,6 +13,7 @@ var lMarkerStations = new Array();
 // https://stackoverflow.com/questions/9912145/leaflet-how-to-find-existing-markers-and-delete-markers
 var markerStations = function(station){
     var marker = L.marker([station.lat, station.longueur]).addTo(mymap);
+    marker.bindPopup('Nb bixis: ' + station.nbBixi + '<br>Nb Places: ' + station.nbEmptyDocks);
     lMarkerStations.push(marker);
     mymap.addLayer(marker);
 }
