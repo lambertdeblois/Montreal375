@@ -14,7 +14,7 @@ var lMarkerStations = new Array();
 var markerStations = function(station){
     var marker = L.marker([station.lat, station.longueur]).addTo(mymap);
     lMarkerStations.push(marker);
-    map.addLayer(marker);
+    mymap.addLayer(marker);
 }
 
 var fetchStations = function (url) {
