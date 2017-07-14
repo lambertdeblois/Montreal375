@@ -68,6 +68,43 @@ public class ActivityController {
         }
         return response;
     }
+    
+    @RequestMapping(value="/activities/contenu", method=RequestMethod.GET)
+    public Map<String, Object> findByContenu(@RequestParam("term")String[] tsterms,
+                                             @RequestParam(value="from", required=false)String from,
+                                             @RequestParam(value="to", required=false)String to){
+        Map <String, Object> response = new HashMap<String, Object>();
+        List<Activity> activities;
+        if (from != null && to != null) {
+            Date dFrom = Date.valueOf(from);
+            Date dTo = Date.valueOf(to);
+            
+            if (dFrom.compareTo(dTo) < 1) {
+                activities = (tsterms.length == 0) ? repository.findAll() : repository.findByContenuWithDates(dFrom, dTo, tsterms);
+                if (activities.isEmpty()){
+                    response.put("status code", 404);
+                    response.put("reponse", "aucune activité trouvée");
+                    return response;
+                }
+            } else {
+                response.put("status code", 400);
+                response.put("reponse", "dates non valide");
+                return response;
+            }
+        } else {
+            activities = (tsterms.length == 0) ? repository.findAll() : repository.findByContenu(tsterms);
+            if (activities.isEmpty()){
+                response.put("status code", 404);
+                response.put("reponse", "aucune activité trouvée");
+                return response;
+            }
+        } 
+        
+        response.put("status code", 200);
+        response.put("reponse", "ok");
+        response.put("activities", activities);     
+        return response;
+    }
 
 
     @RequestMapping(value="/activities", method=RequestMethod.POST)

@@ -83,7 +83,60 @@ public class ActivityRepository {
      return null;
    }
 }
+ 
+ private static final String FIND_BY_CONTENU_WITH_DATES_STMT = 
+      " select"
+    + "     id"
+    + "   , ts_headline(name, q, 'HighlightAll = true') as name"
+    + "   , description"
+    + "   , district"
+    + "   , dates"
+    + "   , nomPlace"
+    + "   , lieu"
+    + " from"
+    + "     activities"
+    + "   , to_tsquery(?) as q"
+    + " where"
+    + "   contenu @@ q and "
+    + "   all(dates) >= ? and all(dates) <= ?"
+    + " order by"
+    + "   ts_rank_cd(to_tsvector(name), q) desc"
+    ;
 
+  public List<Activity> findByContenuWithDates(Date from, Date to, String... tsterms) {
+    String tsquery = Arrays.stream(tsterms).collect(Collectors.joining(" & "));
+    return jdbcTemplate.query(conn -> {
+        PreparedStatement ps = conn.prepareStatement(FIND_BY_CONTENU_WITH_DATES_STMT);
+        ps.setObject(1, tsquery);
+        ps.setDate(2, from);
+        ps.setDate(3, to);
+        return ps;
+    }, new ActivityRowMapper());
+  }
+ 
+ 
+ private static final String FIND_BY_CONTENU_STMT = 
+      " select"
+    + "     id"
+    + "   , ts_headline(name, q, 'HighlightAll = true') as name"
+    + "   , description"
+    + "   , district"
+    + "   , dates"
+    + "   , nomPlace"
+    + "   , lieu"
+    + " from"
+    + "     activities"
+    + "   , to_tsquery(?) as q"
+    + " where"
+    + "   contenu @@ q"
+    + " order by"
+    + "   ts_rank_cd(to_tsvector(name), q) desc"
+    ;
+
+  public List<Activity> findByContenu(String... tsterms) {
+    String tsquery = Arrays.stream(tsterms).collect(Collectors.joining(" & "));
+    return jdbcTemplate.query(FIND_BY_CONTENU_STMT, new Object[]{tsquery}, new ActivityRowMapper());
+  }
 
 private static final String DELETE_ID_STMT = "delete from activities where id=?";
 
