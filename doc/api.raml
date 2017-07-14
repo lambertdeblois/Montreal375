@@ -1,0 +1,166 @@
+#%RAML 0.8
+---
+title: API - Activité du 375ieme
+baseURi: http://localhost:8080
+version: 1
+
+/activities
+    /{id}
+        delete:
+            description: Supprime une activité selon son identifiant.      
+            responses:
+                200:
+                    description: L'activité a été deleter.
+                    body:
+                        application/json:
+                            schema: 
+                                {
+                                    "status code": 200,
+                                    "reponse": "deleted",
+                                    "activity": activity    //TODO: mettre une activite
+                                }
+                404:
+                    description: L'activité n'existe pas.
+                    body:
+                        application/json:
+                            schema:
+                                {
+                                    "status code": 404,
+                                    "reponse": "no activity"
+                                }
+
+        put:
+            description: Met à jour une activité selon son identifiant.
+            responses:
+                200:
+                    description: Les données de l'activité ont été mises à jour.
+                    body:
+                        application/json:
+                        schema:
+                            {
+                                "status code": 200,
+                                "reponse": "updated"
+                                "activite": activity
+                            }
+
+    
+    get:
+        description: Fourni l'information des activités qui correspondent à la recherche.
+        responses:
+            200:
+                description: Les données de l'activité ont correctement envoyées.
+                body:
+                    application/json:
+                    schema:
+                        {
+                            "status code": 200,
+                            "reponse": "ok",
+                            "activite": [activity]
+                        }
+            404:
+                description: Aucune activité ne correspond aux critères.
+                body:
+                application/json:
+                schema:
+                    {
+                        "status code": 200,
+                        "reponse": "aucune activity"
+                    }
+    post:
+        description: Créer une nouvelle activité.
+        responses:
+            201:
+                description: L'activité a été créer.
+                body:
+                    application/json:
+                    schema:
+                        {
+                            "status code": 200,
+                            "reponse": "created",
+                            "activite": activity
+                        }
+            404:
+                description: L'identifiant est déjà utilisé.
+                
+            500:
+                description: Le document json est mal formaté.
+
+/stationsBixi
+    /{id}
+        get:
+        description: Fournir l'information d'une station selon son identifiant.
+        responses:
+          200:
+            description: Les donnees de la station ont été correctement envoyées.
+            body:
+              application/json:
+                schema:
+                  {
+                    "status code": 200,
+                    "reponse": "ok",
+                    "stations": station
+                  }
+          404:
+            description: L'identifiant spécifié n'existe pas.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 404,
+                            "reponse": "aucune station"                           
+                        }
+    get:
+    description: Fournir l'information de stations qui correspondent aux critères.
+    responses:
+        200:
+            description: Les données des stations ont correctement été envoyées.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 200,
+                            "reponse": "ok",
+                            "stations": [stations]
+                        }
+        400:
+            description: Un paramètre n'est pas valide.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 400,
+                            "reponse": "message erreur correspondant"
+                        }
+        404:
+            description: Aucune station ne correspond aux critères.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 404,
+                            "reponse": "aucune station trouvée"
+                        }
+                
+ /pistes
+    get:
+    description: Fournier l'information des pistes cyclables qui correspondent aux critères.
+    response:
+        200:
+            description: Les données des pistes ont correctement été envoyées.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 200,
+                            "reponse": "ok",
+                            "pistes": [pistes]
+                        }
+        404:
+            description: Aucune pistes ne correspond aux critères.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "status code": 404,
+                            "reponse": "aucune piste trouvée"
+                        }
