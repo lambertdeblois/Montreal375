@@ -9,13 +9,12 @@ L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={
 
 var baseURL = new URL(window.location.origin);
 
-var lMarkerStations = new Array();
+var markers = new L.FeatureGroup();
 // https://stackoverflow.com/questions/9912145/leaflet-how-to-find-existing-markers-and-delete-markers
 var markerStations = function(station){
     var marker = L.marker([station.lat, station.longueur]).addTo(mymap);
-    marker.bindPopup('Nb bixis: ' + station.nbBixi + '<br>Nb Places: ' + station.nbEmptyDocks);
-    lMarkerStations.push(marker);
-    mymap.addLayer(marker);
+    marker.bindPopup('Nb bixis: ' + station.nbBixi + '<br>Nb Places: ' + station.nbEmptyDocks);    
+    mymap.addLayer(markers);
 }
 
 var fetchStations = function (url) {
@@ -29,9 +28,7 @@ var fetchStations = function (url) {
 }
 
 function delMarkerStations() {
-for(i=0;i<lMarkerStations.length;i++) {
-    mymap.removeLayer(marker[i]);
-    }
+    mymap.removeLayer(markers);
 }
 
 
