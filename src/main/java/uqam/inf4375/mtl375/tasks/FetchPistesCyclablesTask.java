@@ -36,7 +36,8 @@ public class FetchPistesCyclablesTask {
     @Autowired private PisteCyclableRepository repository;
 
     // @Scheduled(cron="0 0 1 */6 *") // à tous les 6 mois.
-    @Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
+    @Scheduled(cron="*/60 * * * * ?") // à toutes les 10 secondes.
+    //@Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
     public void execute() {
         String kmlString = "";
         try {
@@ -49,33 +50,31 @@ public class FetchPistesCyclablesTask {
         }
         kmlString = kmlString.substring(kmlString.indexOf("table") + 2); //p-e 11 (pour enlever le [ )
         String[] listePistes = kmlString.split("<br><br><br>"); // spliter a la fin d'un objet,debut objet
-        List<PisteCyclable> lPistes = new ArrayList<PisteCyclable>();
         for (String piste : listePistes) {
-            PisteCyclable p = stringToPiste(piste);            
-            lPistes.add(p);
+            PisteCyclable p = stringToPiste(piste);
             repository.insert(p);
+            log.info(p.toString());
         }
-        System.out.println(repository.findAll());
     }
 
     public PisteCyclable stringToPiste(String string) {
-        Pattern pId = Pattern.compile("ID</td><td>([0-9])");
+        Pattern pId = Pattern.compile("ID</td><td>([0-9]*)");
         int id = Integer.parseInt(valueMatcher(pId, string));
-        System.out.println(id);
-        
-        
+        string = string.replaceAll("\\s+","");
+
         // matcher toutes les coordonnees et enlever les 0
-        Pattern pCoor = Pattern.compile("<coordinates>([0-9]*\\.[0-9],[0-9]\\.[0-9])");       
-        String coord = valueMatcher(pCoor, string);
-        
-        Pattern pCoord = Pattern.compile(",0([0-9]*\\.[0-9],[0-9]\\.[0-9])");
+        Pattern pCoor = Pattern.compile("<coordinates>(-?[0-9]*\\.[0-9]*),(-?[0-9]*\\.[0-9]*)");
+        Matcher match = pCoor.matcher(string);
+        match.find();
+        String coord = match.group(2) + " " + match.group(1);
+        coord = coord.replaceAll(",", " ");
+        Pattern pCoord = Pattern.compile(",0(-?[0-9]*\\.[0-9]*),(-?[0-9]*\\.[0-9]*)");
         Matcher matcher = pCoord.matcher(string);
         while(matcher.find()){
-            coord = coord + ',' + matcher.group(1);
+            coord = coord + ',' + matcher.group(2)+" "+ matcher.group(1);
         }
-        System.out.println(coord);   
-        // [ [ [ 300999.97280211409, 5036366.6444866862, 0.0 ], [ 300984.03226815903, 5036358.6871462101, 0.0 ] ] ] } },
-        
+        coord = "LINESTRING("+ coord +")";
+        System.out.println(coord);
         return new PisteCyclable(id, coord);
     }
 

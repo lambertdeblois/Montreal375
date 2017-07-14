@@ -12,6 +12,7 @@ import org.springframework.jdbc.core.*;
 import org.springframework.jdbc.support.*;
 import org.springframework.stereotype.*;
 import org.postgis.*;
+import org.postgresql.*;
 
 @Component
 public class PisteCyclableRepository {
@@ -26,7 +27,7 @@ public class PisteCyclableRepository {
 
   private static final String INSERT_STMT =
       " insert into pistecyclable (id, geom)"
-    + " values (?, geography::STGeomFromText(?, 4326))"
+    + " values (?, ST_GeomFromText(?, 4326))"
     + " on conflict do nothing"
     ;
 
@@ -38,6 +39,19 @@ public class PisteCyclableRepository {
       return ps;
     });
   }
+
+  private static final String GET_PISTE_STMT = "select * from pistecyclable where ST_dwithin(geom, ST_SetSRID(ST_MakePoint(?, ?), 4326), ?)";
+
+  public List<PisteCyclable> findWithPoint(Double lat, Double longueur, int rayon){
+      return jdbcTemplate.query(conn -> {
+          PreparedStatement ps = conn.prepareStatement(GET_PISTE_STMT);
+          ps.setDouble(1, lat);
+          ps.setDouble(2, longueur);
+          ps.setInt(3, rayon);
+          return ps;
+      }, new PisteCyclableRowMapper());
+  }
+
 }
 
 class PisteCyclableRowMapper implements RowMapper<PisteCyclable> {

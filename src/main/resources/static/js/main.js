@@ -30,7 +30,7 @@ var fetchStations = function (url) {
 function delMarkerStations() {
 for(i=0;i<lMarkerStations.length;i++) {
     mymap.removeLayer(marker[i]);
-    }  
+    }
 }
 
 
