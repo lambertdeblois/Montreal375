@@ -1,3 +1,5 @@
+
+
 Fonctionnalités
 Module A
 (5 XP) Le système doit contenir un script d'importation de certaines activités présentées dans le cadre

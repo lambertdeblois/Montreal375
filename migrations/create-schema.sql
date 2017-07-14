@@ -1,7 +1,13 @@
+drop table pistecyclable;
 drop table stationbixi;
 drop table activities;
-
 create extension Postgis;
+
+create table pistecyclable (
+    id int primary key
+  , geom geometry(LINESTRING, 4326)
+);
+
 
 create table stationbixi (
     id int primary key
