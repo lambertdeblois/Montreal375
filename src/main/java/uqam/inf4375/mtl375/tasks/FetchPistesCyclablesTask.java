@@ -36,7 +36,7 @@ public class FetchPistesCyclablesTask {
     @Autowired private PisteCyclableRepository repository;
 
     // @Scheduled(cron="0 0 1 */6 *") // à tous les 6 mois.
-    @Scheduled(cron="*/60 * * * * ?") // à toutes les 10 secondes.
+    //@Scheduled(cron="*/60 * * * * ?") // à toutes les 10 secondes.
     //@Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
     public void execute() {
         String kmlString = "";
@@ -66,15 +66,14 @@ public class FetchPistesCyclablesTask {
         Pattern pCoor = Pattern.compile("<coordinates>(-?[0-9]*\\.[0-9]*),(-?[0-9]*\\.[0-9]*)");
         Matcher match = pCoor.matcher(string);
         match.find();
-        String coord = match.group(2) + " " + match.group(1);
+        String coord = match.group(1) + " " + match.group(2);
         coord = coord.replaceAll(",", " ");
         Pattern pCoord = Pattern.compile(",0(-?[0-9]*\\.[0-9]*),(-?[0-9]*\\.[0-9]*)");
         Matcher matcher = pCoord.matcher(string);
         while(matcher.find()){
-            coord = coord + ',' + matcher.group(2)+" "+ matcher.group(1);
+            coord = coord + ',' + matcher.group(1)+" "+ matcher.group(2);
         }
         coord = "LINESTRING("+ coord +")";
-        System.out.println(coord);
         return new PisteCyclable(id, coord);
     }
 

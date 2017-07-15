@@ -37,18 +37,15 @@ public class PisteCyclableController {
     @Autowired PisteCyclableRepository repository;
 
      @RequestMapping(value="/pistes", method=RequestMethod.GET)
-     public Map<String, Object> getActivities(@RequestParam(value="rayon", required=false) Integer rayon,
+     public Map<String, Object> getPistes(@RequestParam(value="rayon", required=false) Integer rayon,
                                               @RequestParam(value="lat", required=false) Double lat,
                                               @RequestParam(value="longueur", required=false) Double longueur){
         Map<String, Object> response = new HashMap<String, Object>();
         List<PisteCyclable> pistes;
         if (rayon == null) rayon = 200;
 
-        if (lat != null || longueur != null) {
+        if (lat != null && longueur != null) {
             if (lat > 40 && lat < 50 && longueur > -75 && longueur < -70 && rayon > 0){ // si coord sont bonnes
-              System.out.println(lat);
-              System.out.println(longueur);
-              System.out.println(rayon);
                 pistes = repository.findWithPoint(lat, longueur, rayon);
                 if (pistes.isEmpty()){
                   response.put("status code", 404);

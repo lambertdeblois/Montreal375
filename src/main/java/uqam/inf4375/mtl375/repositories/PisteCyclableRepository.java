@@ -40,13 +40,13 @@ public class PisteCyclableRepository {
     });
   }
 
-  private static final String GET_PISTE_STMT = "select * from pistecyclable where ST_dwithin(geom, ST_SetSRID(ST_MakePoint(?, ?), 4326), ?)";
+  private static final String GET_PISTE_STMT = "select * from pistecyclable where st_distance(geom::geography, st_setsrid(st_makepoint(?, ?), 4326)::geography) < ?";
 
   public List<PisteCyclable> findWithPoint(Double lat, Double longueur, int rayon){
       return jdbcTemplate.query(conn -> {
           PreparedStatement ps = conn.prepareStatement(GET_PISTE_STMT);
-          ps.setDouble(1, lat);
-          ps.setDouble(2, longueur);
+          ps.setDouble(1, longueur);
+          ps.setDouble(2, lat);
           ps.setInt(3, rayon);
           return ps;
       }, new PisteCyclableRowMapper());
