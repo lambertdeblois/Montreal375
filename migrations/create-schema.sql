@@ -1,6 +1,4 @@
-drop table pistecyclable;
-drop table stationbixi;
-drop table activities;
+drop table if exists pistecyclable, stationbixi, activities;
 create extension Postgis;
 
 create table pistecyclable (
