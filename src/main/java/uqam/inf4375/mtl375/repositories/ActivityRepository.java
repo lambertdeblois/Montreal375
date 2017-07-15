@@ -83,8 +83,8 @@ public class ActivityRepository {
      return null;
    }
 }
- 
- private static final String FIND_BY_CONTENU_WITH_DATES_STMT = 
+
+ private static final String FIND_BY_CONTENU_WITH_DATES_STMT =
       " select"
     + "     id"
     + "   , ts_headline(name, q, 'HighlightAll = true') as name"
@@ -113,9 +113,9 @@ public class ActivityRepository {
         return ps;
     }, new ActivityRowMapper());
   }
- 
- 
- private static final String FIND_BY_CONTENU_STMT = 
+
+
+ private static final String FIND_BY_CONTENU_STMT =
       " select"
     + "     id"
     + "   , ts_headline(name, q, 'HighlightAll = true') as name"
