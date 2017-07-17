@@ -8,12 +8,12 @@
 
 ## Database migrations
 
-1. Create the database with `psql -U postgres -f migrations/create-database.sql`
+1. Create the database mtl375 with `psql -U postgres -f migrations/create-database.sql` (password: `postgres`)
 
-2. Create the tables with `psql -U postgres -f migrations/create-schema.sql mtl375`
+2. Create the tables with `psql -U postgres -f migrations/create-schema.sql mtl375` (password: `postgres`)
 
 ## Compilation and execution
 
-`mvn spring-boot:run`
+Execute `mvn spring-boot:run` at the projet root
 
 You can now go to [http://localhost:8080/](http://localhost:8080/) 
