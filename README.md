@@ -21,7 +21,9 @@ You can now go to [http://localhost:8080/](http://localhost:8080/)
 
 ## Ce qui marche
 A1, A3, A4, B4, C1, C2, C3, C4, D1, D2
+
 5xp 5xp 5xp 2xp 5xp 2xp 5xp 5xp 5xp 10xp
+
 49xp
 
 ## À faire
