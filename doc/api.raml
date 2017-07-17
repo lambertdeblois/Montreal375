@@ -31,6 +31,23 @@ version: 1
 
         put:
             description: Met à jour une activité selon son identifiant.
+            body:
+                application/json:
+                    schema:
+                        {
+                            "id": "1",
+                            "nom": "update activity",
+                            "description": "i want to update an activity",
+                            "arrondissement": "documentation",
+                            "dates": [
+                                "2017-08-19T04:00:00.000Z"
+                            ],
+                            "lieu": {
+                                "nom": "raml",
+                                "lat": 45.6041243,
+                                "lng": -73.5841978
+                            }
+                        }
             responses:
                 200:
                     description: Les données de l'activité ont été mises à jour.
@@ -68,6 +85,23 @@ version: 1
                     }
     post:
         description: Créer une nouvelle activité.
+        body:
+            application/json:
+                schema:
+                    {
+                        "id": "1",
+                        "nom": "create activity",
+                        "description": "i want to create an activity",
+                        "arrondissement": "documentation",
+                        "dates": [
+                            "2017-08-19T04:00:00.000Z"
+                        ],
+                        "lieu": {
+                            "nom": "raml",
+                            "lat": 45.6041243,
+                            "lng": -73.5841978
+                        }
+                    }
         responses:
             201:
                 description: L'activité a été créer.
