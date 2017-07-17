@@ -4,6 +4,88 @@ title: API - Activité du 375ieme
 baseURi: http://localhost:8080
 version: 1
 
+types:
+    ActivityEntrant:
+        properties:
+            id: number
+            nom: string
+            description: string
+            arrondissement: string
+            dates: string[]
+            lieu: object
+            example:
+                {
+                    "id": "1",
+                    "nom": "activity",
+                    "description": "example of an activity",
+                    "arrondissement": "documentation",
+                    "dates": [
+                        "2017-08-19T04:00:00.000Z"
+                    ],
+                    "lieu": {
+                        "nom": "raml",
+                        "lat": 45.6041243,
+                        "lng": -73.5841978
+                    }
+                }
+
+    ActivitySortant:
+        properties:
+            id: number
+            nom: string
+            description: string
+            arrondissement: string
+            dates: string[]
+            place: object
+            example:
+                {
+                    "id": "1",
+                    "nom": "activity",
+                    "description": "example of an activity",
+                    "arrondissement": "documentation",
+                    "dates": [
+                        "2017-08-19T04:00:00.000Z"
+                    ],
+                    "place": {
+                        "name": "raml",
+                        "latitude": 45.6041243,
+                        "longitude": -73.5841978
+                    }
+                }
+
+    
+
+    Station:
+        properties:  
+            id: number
+            name: string  
+            lat: number
+            long: number
+            nbBikes: number
+            nbEmpytDocks: number
+            example:  
+              {
+                "id": 1,
+                "name": "Berri / de Maisonneuve",                
+                "lat": 45.6041243,
+                "long": -73.5841978,
+                "nbBikes": 2,
+                "nbEmptyDocks": 10
+              }
+    
+    Piste:
+        properties:
+            id: number
+            geom: string
+            example:
+                {
+                    "id": 1
+                    "geom": "LINESTRING(45.6041243 -73.5841978,45.6041243 -73.5841978)"
+                }
+            
+            
+
+
 /activities
     /{id}
         delete:
@@ -17,7 +99,7 @@ version: 1
                                 {
                                     "status code": 200,
                                     "reponse": "deleted",
-                                    "activity": activity    //TODO: mettre une activite
+                                    "activity": ActivitySortant   
                                 }
                 404:
                     description: L'activité n'existe pas.
@@ -34,20 +116,7 @@ version: 1
             body:
                 application/json:
                     schema:
-                        {
-                            "id": "1",
-                            "nom": "update activity",
-                            "description": "i want to update an activity",
-                            "arrondissement": "documentation",
-                            "dates": [
-                                "2017-08-19T04:00:00.000Z"
-                            ],
-                            "lieu": {
-                                "nom": "raml",
-                                "lat": 45.6041243,
-                                "lng": -73.5841978
-                            }
-                        }
+                        type: ActivityEntrant
             responses:
                 200:
                     description: Les données de l'activité ont été mises à jour.
@@ -57,12 +126,38 @@ version: 1
                             {
                                 "status code": 200,
                                 "reponse": "updated"
-                                "activite": activity
+                                "activite": ActivitySortant
                             }
 
     
     get:
         description: Fourni l'information des activités qui correspondent à la recherche.
+        queryParameters:
+            from:
+                type: string
+                description: date de début
+                required: false
+                example: 2017-01-01
+            to:
+                type: string
+                description: date de fin
+                required: false
+                example: 2017-01-02
+            lat:
+                type: number
+                description: latitude
+                required: false
+                example: 45.6041243
+            longueur:
+                type: number
+                description: longitude
+                required: false
+                example: -73.5841978
+            rayon:
+                type: number
+                description: rayon pour la recherche
+                required: false
+                example: 1000                
         responses:
             200:
                 description: Les données de l'activité ont correctement envoyées.
@@ -72,7 +167,7 @@ version: 1
                         {
                             "status code": 200,
                             "reponse": "ok",
-                            "activite": [activity]
+                            "activite": ActivitySortant[]
                         }
             404:
                 description: Aucune activité ne correspond aux critères.
@@ -88,20 +183,7 @@ version: 1
         body:
             application/json:
                 schema:
-                    {
-                        "id": "1",
-                        "nom": "create activity",
-                        "description": "i want to create an activity",
-                        "arrondissement": "documentation",
-                        "dates": [
-                            "2017-08-19T04:00:00.000Z"
-                        ],
-                        "lieu": {
-                            "nom": "raml",
-                            "lat": 45.6041243,
-                            "lng": -73.5841978
-                        }
-                    }
+                    type: ActivityEntrant
         responses:
             201:
                 description: L'activité a été créer.
@@ -111,7 +193,7 @@ version: 1
                         {
                             "status code": 200,
                             "reponse": "created",
-                            "activite": activity
+                            "activite": ActivitySortant
                         }
             404:
                 description: L'identifiant est déjà utilisé.
@@ -119,82 +201,172 @@ version: 1
             500:
                 description: Le document json est mal formaté.
 
+    /contenu
+        get:
+            description: recherche par des activités par contenu
+            queryParameters:
+                term:
+                    type: string
+                    description: le mot a chercher
+                    required: true
+                    example: cirque
+                from:
+                    type: string
+                    description: date de début
+                    required: false
+                    example: 2017-01-01
+                to:
+                    type: string
+                    description: date de fin
+                    required: false
+                    example: 2017-01-02
+            responses:
+                200:
+                    description: Des activtités ont été trouvées.
+                    body:
+                        application/json:
+                        schema:
+                            type: Piste
+                400:
+                    description: Dates non valide
+                    body:
+                        application/json:
+                        schema:
+                            {
+                                "status code": 400,
+                                "reponse": "message erreur correspondant"
+                            }
+                404:
+                    description: Aucune activité trouvée
+                    body:
+                        application/json:
+                        schema:
+                            {
+                                "status code": 404,
+                                "reponse": "aucune activité trouvée"
+                            }
 /stationsBixi
     /{id}
         get:
-        description: Fournir l'information d'une station selon son identifiant.
-        responses:
-          200:
-            description: Les donnees de la station ont été correctement envoyées.
-            body:
-              application/json:
-                schema:
-                  {
-                    "status code": 200,
-                    "reponse": "ok",
-                    "stations": station
-                  }
-          404:
-            description: L'identifiant spécifié n'existe pas.
-            body:
-                application/json:
+            description: Fournir l'information d'une station selon son identifiant.
+            responses:
+              200:
+                description: Les donnees de la station ont été correctement envoyées.
+                body:
+                  application/json:
                     schema:
-                        {
-                            "status code": 404,
-                            "reponse": "aucune station"                           
-                        }
+                      {
+                        "status code": 200,
+                        "reponse": "ok",
+                        "stations": Station
+                      }
+              404:
+                description: L'identifiant spécifié n'existe pas.
+                body:
+                    application/json:
+                        schema:
+                            {
+                                "status code": 404,
+                                "reponse": "aucune station"                           
+                            }
     get:
-    description: Fournir l'information de stations qui correspondent aux critères.
-    responses:
-        200:
-            description: Les données des stations ont correctement été envoyées.
-            body:
-                application/json:
-                    schema:
-                        {
-                            "status code": 200,
-                            "reponse": "ok",
-                            "stations": [stations]
-                        }
-        400:
-            description: Un paramètre n'est pas valide.
-            body:
-                application/json:
-                    schema:
-                        {
-                            "status code": 400,
-                            "reponse": "message erreur correspondant"
-                        }
-        404:
-            description: Aucune station ne correspond aux critères.
-            body:
-                application/json:
-                    schema:
-                        {
-                            "status code": 404,
-                            "reponse": "aucune station trouvée"
-                        }
+        description: Fournir l'information de stations qui correspondent aux critères.
+        queryParameters:
+                nbBixi:
+                    type: number
+                    description: nombre de bixi minimum
+                    required: false
+                    example: 2            
+                lat:
+                    type: number
+                    description: latitude
+                    required: false
+                    example: 45.6041243
+                longueur:
+                    type: number
+                    description: longitude
+                    required: false
+                    example: -73.5841978
+                rayon:
+                    type: number
+                    description: rayon pour la recherche
+                    required: false
+                    example: 1000   
+        responses:
+            200:
+                description: Les données des stations ont correctement été envoyées.
+                body:
+                    application/json:
+                        schema:
+                            {
+                                "status code": 200,
+                                "reponse": "ok",
+                                "stations": Station[]
+                            }
+            400:
+                description: Un paramètre n'est pas valide.
+                body:
+                    application/json:
+                        schema:
+                            {
+                                "status code": 400,
+                                "reponse": "message erreur correspondant"
+                            }
+            404:
+                description: Aucune station ne correspond aux critères.
+                body:
+                    application/json:
+                        schema:
+                            {
+                                "status code": 404,
+                                "reponse": "aucune station trouvée"
+                            }
                 
  /pistes
     get:
-    description: Fournier l'information des pistes cyclables qui correspondent aux critères.
-    response:
-        200:
-            description: Les données des pistes ont correctement été envoyées.
-            body:
-                application/json:
-                    schema:
-                        {
-                            "status code": 200,
-                            "reponse": "ok",
-                            "pistes": [pistes]
-                        }
-        404:
-            description: Aucune pistes ne correspond aux critères.
-            body:
-                application/json:
-                    schema:
-                        {
-                            "status code": 404,
-                            "reponse": "aucune piste trouvée"
-                        }
+        description: Fournier l'information des pistes cyclables qui correspondent aux critères.
+        queryParameters:           
+                lat:
+                    type: number
+                    description: latitude
+                    required: false
+                    example: 45.6041243
+                longueur:
+                    type: number
+                    description: longitude
+                    required: false
+                    example: -73.5841978
+                rayon:
+                    type: number
+                    description: rayon pour la recherche
+                    required: false
+                    example: 1000 
+        response:
+            200:
+                description: Les données des pistes ont correctement été envoyées.
+                body:
+                    application/json:
+                        schema:
+                            {
+                                "status code": 200,
+                                "reponse": "ok",
+                                "pistes": Piste[]
+                            }
+            400:
+                description: manque une coordonnée ou coordonnées invalides
+                body:
+                    application/json:
+                        schema:
+                            {
+                                "status code": 400,
+                                "reponse": "message erreur correspondant"
+                            }
+            404:
+                description: Aucune pistes ne correspond aux critères.
+                body:
+                    application/json:
+                        schema:
+                            {
+                                "status code": 404,
+                                "reponse": "aucune piste trouvée"
+                            }
