@@ -56,19 +56,26 @@ public class ActivityController {
     public Map<String, Object> updateActivity(@RequestBody Activity activity, @PathVariable("id")int id){
         // valider le json qui rentre par le js avant dappeler la route
         Map<String, Object> response = new HashMap<>();
-        if (repository.findById(activity.getId()) != null){
-            repository.delete(activity.getId());
-            repository.insert(activity);
-            response.put("status code", 201);
-            response.put("reponse", "activity updated");
-            response.put("activity", activity);
-        } else {
-            response.put("status code", 400);
-            response.put("reponse", "activity does not exist");
+        try {
+            if (repository.findById(activity.getId()) != null){
+                repository.delete(activity.getId());
+                repository.insert(activity);
+                response.put("status code", 201);
+                response.put("reponse", "activity updated");
+                response.put("activity", activity);
+            } else {
+                response.put("status code", 400);
+                response.put("reponse", "activity does not exist");
+            }
+        } catch (NullPointerException e) {
+          response.put("status code", 400);
+          response.put("reponse", "json mal formate");
+          response.put("error", e);
+          return response;
         }
         return response;
     }
-    
+
     @RequestMapping(value="/activities/contenu", method=RequestMethod.GET)
     public Map<String, Object> findByContenu(@RequestParam("term")String[] tsterms,
                                              @RequestParam(value="from", required=false)String from,
@@ -78,7 +85,7 @@ public class ActivityController {
         if (from != null && to != null) {
             Date dFrom = Date.valueOf(from);
             Date dTo = Date.valueOf(to);
-            
+
             if (dFrom.compareTo(dTo) < 1) {
                 activities = (tsterms.length == 0) ? repository.findAll() : repository.findByContenuWithDates(dFrom, dTo, tsterms);
                 if (activities.isEmpty()){
@@ -98,11 +105,11 @@ public class ActivityController {
                 response.put("reponse", "aucune activité trouvée");
                 return response;
             }
-        } 
-        
+        }
+
         response.put("status code", 200);
         response.put("reponse", "ok");
-        response.put("activities", activities);     
+        response.put("activities", activities);
         return response;
     }
 
@@ -111,14 +118,21 @@ public class ActivityController {
     public Map<String, Object> addActivity(@RequestBody Activity activite){
         // valider le json qui rentre par le js avant dappeler la route
         Map<String, Object> response = new HashMap<>();
-        if(repository.findById(activite.getId()) == null){
-            repository.insert(activite);
-            response.put("status code", 201);
-            response.put("reponse", "activity created");
+        try {
+          if(repository.findById(activite.getId()) == null){
+              repository.insert(activite);
+              response.put("status code", 201);
+              response.put("reponse", "activity created");
 
-        } else {
-            response.put("status code", 400);
-            response.put("reponse", "activity already exist");
+          } else {
+              response.put("status code", 400);
+              response.put("reponse", "activity already exist");
+          }
+        } catch (NullPointerException e) {
+          response.put("status code", 400);
+          response.put("reponse", "json mal formate");
+          response.put("error", e);
+          return response;
         }
         return response;
     }
