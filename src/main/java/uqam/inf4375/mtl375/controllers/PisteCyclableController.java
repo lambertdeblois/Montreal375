@@ -26,6 +26,8 @@ import java.sql.Date;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+
 
 @RestController
 /**
@@ -37,10 +39,9 @@ public class PisteCyclableController {
     @Autowired PisteCyclableRepository repository;
 
      @RequestMapping(value="/pistes", method=RequestMethod.GET)
-     public Map<String, Object> getPistes(@RequestParam(value="rayon", required=false) Integer rayon,
+     public ResponseEntity<List<PisteCyclable>> getPistes(@RequestParam(value="rayon", required=false) Integer rayon,
                                               @RequestParam(value="lat", required=false) Double lat,
                                               @RequestParam(value="longueur", required=false) Double longueur){
-        Map<String, Object> response = new HashMap<String, Object>();
         List<PisteCyclable> pistes;
         if (rayon == null) rayon = 200;
 
@@ -48,25 +49,15 @@ public class PisteCyclableController {
             if (lat > 40 && lat < 50 && longueur > -75 && longueur < -70 && rayon > 0){ // si coord sont bonnes
                 pistes = repository.findWithPoint(lat, longueur, rayon);
                 if (pistes.isEmpty()){
-                  response.put("status code", 404);
-                  response.put("reponse", "aucune piste trouvée");
-                  return response;
+                  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
                 }
             } else {
-              response.put("status code", 400);
-              response.put("reponse", "coord non valide");
-              return response;
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         } else {
-          response.put("status code", 400);
-          response.put("reponse", "manque coord");
-          return response;
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        response.put("status code", 200);
-        response.put("reponse", "ok");
-        response.put("pistes", pistes);
-
-        return response;
+        return new ResponseEntity<List<PisteCyclable>>(pistes, HttpStatus.OK);
      }
 
 
