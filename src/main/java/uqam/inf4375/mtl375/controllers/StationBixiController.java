@@ -25,6 +25,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.*;
+import org.springframework.dao.*;
+
 
 @RestController
 /**
@@ -36,23 +39,23 @@ public class StationBixiController {
     @Autowired StationBixiRepository repository;
 
     @RequestMapping(value="/stationsBixi/{id}", method=RequestMethod.GET)
-    public Map<String, Object> getStationById(@PathVariable("id") int id) {
-        Map <String, Object> response = new HashMap<>();
-        StationBixi station = repository.findById(id);
-        if (station != null){
-            response.put("status code", 200);
-            response.put("reponse", "ok");
-            response.put("station", station);
-        } else {
-            response.put("status code", 404);
-            response.put("reponse", "pas ok");
+    public ResponseEntity<StationBixi> getStationById(@PathVariable("id") int id) {
+        StationBixi station = null;
+        try {
+            station = repository.findById(id);
+        } catch (EmptyResultDataAccessException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return response;
+        if (station != null){
+            return new ResponseEntity<StationBixi>(station, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
 
     @RequestMapping(value="/stationsBixi", method=RequestMethod.GET)
-    public Map<String, Object> getStations(@RequestParam(value="rayon", required=false) Integer rayon,
+    public ResponseEntity<List<StationBixi>> getStations(@RequestParam(value="rayon", required=false) Integer rayon,
                                            @RequestParam(value="lat", required=false) Double lat,
                                            @RequestParam(value="longueur", required=false) Double longueur,
                                            @RequestParam(value="nbBixi", required=false) Integer nbBixi){
@@ -64,40 +67,15 @@ public class StationBixiController {
         return getStationsParameters(rayon, lat, longueur, nbBixi);
     }
 
-    public Map<String, Object> getStationsParameters(int rayon, Double lat, Double longueur, int nbBixi){
-        Map <String, Object> response = new HashMap<>();
-
-        if (rayon < 1) {
-            response.put("satus code", 400);
-            response.put("reponse", "rayon < 1");
-            return response;
-        }
-        if (lat < -100 || lat > 100) {
-            response.put("status code", 400);
-            response.put("reponse", "lat invalide");
-            return response;
-        }
-        if (longueur < -100 || longueur > 100) {
-            response.put("status code", 400);
-            response.put("reponse", "longueur invalide");
-            return response;
-        }
-        if (nbBixi < 0) {
-            response.put("status code", 400);
-            response.put("reponse", "nbBixi < 0");
-            return response;
+    public ResponseEntity<List<StationBixi>> getStationsParameters(int rayon, Double lat, Double longueur, int nbBixi){
+        if (rayon < 1 || lat < 40 || lat > 50 || longueur < -80 || longueur > -70 || nbBixi < 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<StationBixi> stations = repository.findWithParameters(rayon, lat, longueur, nbBixi);
 
         if (stations.isEmpty()){
-            response.put("status code", 404);
-            response.put("reponse", "aucune station trouvee");
-            return response;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-
-        response.put("status code", 200);
-        response.put("reponse", "ok");
-        response.put("stations", stations);
-        return response;
+        return new ResponseEntity<List<StationBixi>>(stations, HttpStatus.OK);
     }
 }
