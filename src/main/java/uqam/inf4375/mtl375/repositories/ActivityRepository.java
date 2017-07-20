@@ -97,8 +97,7 @@ public class ActivityRepository {
     + "     activities"
     + "   , to_tsquery(?) as q"
     + " where"
-    + "   contenu @@ q and "
-    + "   all(dates) >= ? and all(dates) <= ?"
+    + "   name @@ q and ? <= all(dates) and ? >= all(dates)"
     + " order by"
     + "   ts_rank_cd(to_tsvector(name), q) desc"
     ;
@@ -128,7 +127,7 @@ public class ActivityRepository {
     + "     activities"
     + "   , to_tsquery(?) as q"
     + " where"
-    + "   contenu @@ q"
+    + "   name @@ q"
     + " order by"
     + "   ts_rank_cd(to_tsvector(name), q) desc"
     ;
