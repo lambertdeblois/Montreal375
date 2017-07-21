@@ -28,4 +28,6 @@ A1, A3, A4, B1, B2, B4, C1, C2, C3, C4, D1, D2
 
 ## À faire
 
+ajuster les crons pour les intervalles respectifs
+
 B3 (5xp): Faire les formulaire pour update/create/delete.  Les APIS sont fait, ils faut faire le js qui fait les appels.  Updater la liste après chaque appel.
