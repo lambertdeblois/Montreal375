@@ -75,7 +75,7 @@ public class ActivityController {
             if (dFrom.compareTo(dTo) < 1) {
                 activities = (tsterms.length == 0) ? repository.findAll() : repository.findByContenuWithDates(dFrom, dTo, tsterms);
                 if (activities.isEmpty()){
-                  return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                  return new ResponseEntity<List<Activity>>(activities, HttpStatus.NOT_FOUND);
                 }
             } else {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -83,7 +83,7 @@ public class ActivityController {
         } else {
             activities = (tsterms.length == 0) ? repository.findAll() : repository.findByContenu(tsterms);
             if (activities.isEmpty()){
-              return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+              return new ResponseEntity<List<Activity>>(activities,HttpStatus.NOT_FOUND);
             }
         }
         return new ResponseEntity<List<Activity>>(activities, HttpStatus.OK);

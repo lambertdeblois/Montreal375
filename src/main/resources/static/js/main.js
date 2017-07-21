@@ -30,8 +30,8 @@ var fetchStations = function (url) {
   fetch(url).then(function(resp) {
     return resp.json()
   }).then(function (data) {
-    if (data.stations !== null){
-        data.stations.map(markerStations);
+    if (data !== null){
+        data.map(markerStations);
         mymap.addLayer(markers);
     }
   })
@@ -44,7 +44,7 @@ function delMarkerStations() {
 
 
 function zoom(latitude, longitude) {
-  mymap.setView(new L.LatLng(latitude, longitude), 13);
+  mymap.setView(new L.LatLng(latitude, longitude), 15);
   delMarkerStations();
   fetchStations( new URL('/stationsBixi?rayon=500&lat='+latitude+'&longueur='+longitude, baseURL));
 }
@@ -53,42 +53,76 @@ function zoom(latitude, longitude) {
 var renderActivity = function (activity) {
   var lat = activity.place.latitude;
   var lng = activity.place.longitude;
-  var marker = L.marker([lat, lng]).addTo(mymap);
-  marker.bindPopup(activity.name + '<br>' + activity.description + "<br>" + activity.dates + "<br>" + activity.place.name).openPopup();
-  gActivities.addLayer(marker);
-  if (lat === 0.0 || lng === 0.0){
+  if (lat === 0 || lng === 0){
     return '<li>' + activity.name + '</li>';
   } else {
-  return '<li> <a onclick="zoom(' + lat + ',' + lng + ')">' + activity.name +'</li>';
+    var marker = L.marker([lat, lng]).addTo(mymap);
+    marker.bindPopup(activity.name + '<br>' + activity.description + "<br>" + activity.dates + "<br>" + activity.place.name);
+    gActivities.addLayer(marker);
+    return '<li> <a onclick="zoom(' + lat + ',' + lng + ')">' + activity.name +'</li>';
   }
 }
 
 var renderListeActivities = function (activities) {
   return '<ul>'+ activities.map(renderActivity).join('') +'</ul>';
-  mymap.addLayer(gActivities);
 }
 
 var installerListeActivities = function (listeActivitiesHtml) {
+  mymap.addLayer(gActivities);
+  mymap.closePopup();
   document.getElementById('liste-activities').innerHTML = listeActivitiesHtml;
 }
 
 
 var fetchActivities = function (url) {
   mymap.removeLayer(gActivities);
+  gActivities = new L.FeatureGroup();
   fetch(url).then(function(resp) {
     return resp.json()
   }).then(function (data) {
-    installerListeActivities(renderListeActivities(data.activity))
+    if (data.length === 0) {
+      mymap.setView(new L.LatLng(45.508931, -73.568568), 10);
+      installerListeActivities("Aucune activite trouvee.")
+    } else {
+      installerListeActivities(renderListeActivities(data));
+      mymap.closePopup();
+      mymap.fitBounds(gActivities.getBounds());
+    }
   })
 }
 
+var rechercher = function (terms) {
+  var url = new URL('/activities/contenu', baseURL);
+  terms.forEach(function (t) { url.searchParams.append('term', t) })
+
+  fetchActivities(url)
+}
+
+var rechercherWithDates = function (terms, from, to) {
+  var url = new URL('/activities/contenu', baseURL);
+  terms.forEach(function (t) { url.searchParams.append('term', t); });
+  url.searchParams.append('from', from);
+  url.searchParams.append('to', to);
+  fetchActivities(url);
+}
 
 var lierFormulaire = function () {
     var form = document.getElementById('search-form');
     var input = document.getElementById('search-input');
+    var from = document.getElementById('from-input');
+    var to = document.getElementById('to-input');
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      rechercher(input.value.split(/\s+/));
+      if (input.value === "") {
+        installerListeActivities("Parametre de recherche invalides.");
+      } else if (from.value !== "" && to.value !== "") {
+        rechercherWithDates(input.value.split(/\s+/), from.value, to.value);
+      } else {
+        rechercher(input.value.split(/\s+/));
+      }
+      mymap.removeLayer(gActivities);
+      gActivities = new L.FeatureGroup();
+
     })
 }
 
