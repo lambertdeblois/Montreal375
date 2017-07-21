@@ -20,14 +20,12 @@ You can now go to [http://localhost:8080/](http://localhost:8080/)
 
 
 ## Ce qui marche
-A1, A3, A4, B1, B2, B4, C1, C2, C3, C4, D1, D2
+A1, A3, A4, B1, B2, B3, B4, C1, C2, C3, C4, D1, D2
 
-5xp 5xp 5xp 5xp 5xp 2xp 5xp 2xp 5xp 5xp 5xp 10xp
+5xp 5xp 5xp 5xp 5xp 5xp 2xp 5xp 2xp 5xp 5xp 5xp 10xp
 
-59xp
+64xp
 
 ## À faire
 
 ajuster les crons pour les intervalles respectifs
-
-B3 (5xp): Faire les formulaire pour update/create/delete.  Les APIS sont fait, ils faut faire le js qui fait les appels.  Updater la liste après chaque appel.
