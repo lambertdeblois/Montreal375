@@ -59,7 +59,9 @@ public class StationBixiController {
                                            @RequestParam(value="lat", required=false) Double lat,
                                            @RequestParam(value="longueur", required=false) Double longueur,
                                            @RequestParam(value="nbBixi", required=false) Integer nbBixi){
-
+        if (rayon == null && lat == null && lat == null && longueur == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         if (rayon == null) rayon = 1000;
         if (lat == null) lat = 45.5087546;
         if (longueur == null) longueur = -73.5688033;
