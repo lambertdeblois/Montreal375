@@ -126,12 +126,109 @@ var lierFormulaire = function () {
     })
 }
 
+var lierActiviy = function () {
+  var form = document.getElementById('activity-form');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (document.getElementById('deleteRadio').checked) {
+      var id = document.getElementById('form-id').value;
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.status);
+          fetchActivities( new URL('/activities', baseURL));
+        } else if (this.readyState == 4 && this.status != 200) {
+          alert("Erreur lors de la suppression");
+          console.log(this.status);
+        }
+      };
+      xhttp.open("DELETE", "/activities/" + id);
+      xhttp.send();
+    } else if (document.getElementById('modifyRadio').checked) {
+      var json = getActivity();
+      console.log(json);
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.status);
+          fetchActivities( new URL('/activities', baseURL));
+        } else if (this.readyState == 4 && this.status != 200) {
+          alert("Erreur lors de la modification");
+          console.log(this.status);
+        }
+      };
+      xhttp.open("PUT", "/activities/" + document.getElementById('form-id').value);
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.send(json);
+    } else {
+      var json = getActivity();
+      console.log(json);
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 201) {
+          console.log(this.status);
+          fetchActivities( new URL('/activities', baseURL));
+        } else if (this.readyState == 4 && this.status != 201) {
+          alert("Erreur lors de l'ajout");
+          console.log(this.status);
+        }
+      };
+      xhttp.open("POST", "/activities");
+      xhttp.setRequestHeader("Content-Type", "application/json");
+      xhttp.send(json);
+    }
+  })
+}
+
+var getActivity = function () {
+  var json = JSON.stringify({
+    id: document.getElementById('form-id').value,
+    name: document.getElementById('form-name').value,
+    description: document.getElementById('form-description').value,
+    district: document.getElementById('form-arrondissement').value,
+    dates: [document.getElementById('form-date').value],
+    place: { nom: document.getElementById('form-nom-place').value,
+            latitude: document.getElementById('form-lat').value,
+            longitude: document.getElementById('form-lng').value }
+  });
+  return json;
+};
+
+$(document).ready(function () {
+  console.log('doc ready');
+  $("#form-new").click( function(){
+    console.log('click');
+    var json = getActivity();
+  })
+});
+
+
+function radioClick(radio) {
+    if (radio.value === "delete") {
+      document.getElementById('form-name').type = 'hidden';
+      document.getElementById('form-description').type = 'hidden';
+      document.getElementById('form-arrondissement').type = 'hidden';
+      document.getElementById('form-date').type = 'hidden';
+      document.getElementById('form-nom-place').type = 'hidden';
+      document.getElementById('form-lat').type = 'hidden';
+      document.getElementById('form-lng').type = 'hidden';
+    } else {
+      document.getElementById('form-name').type = 'text';
+      document.getElementById('form-description').type = 'text';
+      document.getElementById('form-arrondissement').type = 'text';
+      document.getElementById('form-date').type = 'date';
+      document.getElementById('form-nom-place').type = 'text';
+      document.getElementById('form-lat').type = 'text';
+      document.getElementById('form-lng').type = 'text';
+    }
+}
 
 document.addEventListener('DOMContentLoaded', function() {
-    fetchActivities( new URL('/activities', baseURL));
+  fetchActivities( new URL('/activities', baseURL));
     mymap.setView(new L.LatLng(45.508931, -73.568568), 10);
     lierFormulaire();
-})
+    lierActiviy();
+});
 
 
 
