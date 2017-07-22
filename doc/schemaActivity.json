@@ -1,0 +1,51 @@
+{
+    "title": "Activity",
+    "type": "object",
+    "properties": {
+        "id": {
+            "descriptions": "Unique identifier of an activity",
+            "type": "string"
+        },
+        "nom": {
+            "description": "Name of the activity.",
+            "type": "string"
+        },
+        "description": {
+            "description": "description of the activity.",
+            "type": "string"
+        },
+        "arrondissement": {
+            "description": "district of the activity.",
+            "type": "string"
+        },
+        "dates": {
+            "description": "array of dates of the activity.",
+            "type": "array",
+            "items": {
+                "description": "date of the activity.",
+                "type": "string"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        },
+        "lieu": {
+            "type": "object",
+            "propertries": {
+                "nom": {
+                    "description": "name of the place of the activity.",
+                    "type": "string"
+                },
+                "lat": {
+                    "description": "latitude",
+                    "type": "number"
+                },
+                "lng": {
+                    "description": "longitude",
+                    "type": "string"
+                }
+            },
+            "required": ["nom"]
+        }        
+    },
+    "required": ["id", "nom", "description", "arrondissement", "dates", "lieu"]
+}

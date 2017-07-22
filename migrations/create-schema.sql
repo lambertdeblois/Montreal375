@@ -1,5 +1,27 @@
-create table citations (
+drop table if exists pistecyclable, stationbixi, activities;
+create extension Postgis;
+
+create table pistecyclable (
     id int primary key
-  , auteur text
-  , contenu text
+  , geom geometry(LINESTRING, 4326)
+);
+
+
+create table stationbixi (
+    id int primary key
+  , name text
+  , nbBikes int
+  , nbEmptyDocks int
+  , lieu geography(POINT, 4326)
+);
+
+
+create table activities (
+    id int primary key
+  , name text
+  , description text
+  , district text
+  , dates date[4]
+  , nomPlace text
+  , lieu geography(POINT, 4326)
 );

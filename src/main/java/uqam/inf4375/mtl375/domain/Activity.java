@@ -1,0 +1,59 @@
+/*
+ * Copyright 2017 Vincent Lafrenaye-Lirette <vi.lirette@gmail.com>.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package uqam.inf4375.mtl375.domain;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
+import java.sql.Date;
+
+/**
+ *
+ * @author vincent
+ */
+public class Activity {
+    private int id;
+    private String name;
+    private String description;
+    private String district;
+    private Date[] dates;
+    private Place place;
+
+
+    public Activity() {      
+    }
+
+    public Activity(int id, String name, String description, String district, Date[] dates, Place place) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.district = district;
+        this.dates = dates;
+        this.place = place;
+    }
+
+    @JsonProperty public int getId() { return id; }
+    @JsonProperty public String getName() { return name; }
+    @JsonProperty public String getDescription() { return description; }
+    @JsonProperty public String getDistrict() { return district; }
+    @JsonProperty public Date[] getDates() { return dates; }
+    @JsonProperty public Place getPlace() { return place; }
+
+    @Override
+    public String toString(){
+        return String.format("%s : %s", name, district);
+    }
+
+}
