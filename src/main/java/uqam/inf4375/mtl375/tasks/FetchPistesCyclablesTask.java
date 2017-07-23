@@ -37,7 +37,7 @@ public class FetchPistesCyclablesTask {
 
     //  @Scheduled(cron="0 0 1 */6 *") // à tous les 6 mois.
     //@Scheduled(cron="*/60 * * * * ?") // à toutes les 10 secondes.
-    //@Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
+    @Scheduled(cron="*/10 * * * * ?") // à toutes les 10 secondes.
     public void execute() {
         String kmlString = "";
         try {

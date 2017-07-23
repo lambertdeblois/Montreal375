@@ -229,9 +229,3 @@ document.addEventListener('DOMContentLoaded', function() {
     lierFormulaire();
     lierActiviy();
 });
-
-
-
-//https://github.com/github/fetch#read-this-first  pour faire un appel a une route (ajax) fetch
-//https://github.com/Morriar/INF4375-http-tester   pour faire un appel a une route (ajax) fetch
-//https://github.com/Morriar/INF4375-jsonschema/blob/master/exercice1.js   pour valider json schema

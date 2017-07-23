@@ -1,18 +1,3 @@
-/*
- * Copyright 2017 Vincent Lafrenaye-Lirette <vi.lirette@gmail.com>.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package uqam.inf4375.mtl375.tasks;
 
 import uqam.inf4375.mtl375.domain.*;
@@ -35,8 +20,8 @@ public class FetchActivityTask {
 
     @Autowired private ActivityRepository repository;
 
-    //@Scheduled(cron="*/10 * * * * ?")  // a toutes les 10 minutes
-    @Scheduled(cron = "*/5 * * * * ?") // à toutes les 5 secondes.
+    @Scheduled(cron="*/10 * * * * ?")  // a toutes les 10 minutes
+    //@Scheduled(cron = "*/5 * * * * ?") // à toutes les 5 secondes.
     public void execute(){
         Arrays.asList(new RestTemplate().getForObject(URL, FetchActivity[].class)).stream()
           .map(this::asActivity)
