@@ -28,8 +28,8 @@ public class FetchBixiTask {
 
     @Autowired private StationBixiRepository repository;
 
-    //@Scheduled(cron="*/10 * * * *") // à toutes les 10 minutes.
-    @Scheduled(cron = "*/5 * * * * ?") // à toutes les 10 secondes.
+    //@Scheduled(cron="*/10 * * * *") // every 10 seconds.
+    @Scheduled(cron = "* */10 * * * *") // every 10 minutes.
     public void execute() {
         String xmlString = "";
         try {

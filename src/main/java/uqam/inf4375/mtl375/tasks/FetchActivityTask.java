@@ -26,8 +26,8 @@ public class FetchActivityTask {
 
     @Autowired private ActivityRepository repository;
 
-    @Scheduled(cron="*/10 * * * * ?")  // a toutes les 10 minutes
-    //@Scheduled(cron = "*/5 * * * * ?") // à toutes les 5 secondes.
+    //@Scheduled(cron="*/10 * * * * *")  // every 10 seconds.
+    @Scheduled(cron = "0 0 0 * * 0") // at 0:00 every Sunday.
     public void execute(){
         Arrays.asList(new RestTemplate().getForObject(URL, FetchActivity[].class)).stream()
           .map(this::asActivity)
