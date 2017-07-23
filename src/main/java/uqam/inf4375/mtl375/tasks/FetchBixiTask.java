@@ -26,7 +26,8 @@ public class FetchBixiTask {
     private static final Logger log = LoggerFactory.getLogger(FetchBixiTask.class);
     private static final String URL = "https://montreal.bixi.com/data/bikeStations.xml";
 
-    @Autowired private StationBixiRepository repository;
+    @Autowired
+    private StationBixiRepository repository;
 
     //@Scheduled(cron="*/10 * * * *") // every 10 seconds.
     @Scheduled(cron = "* */10 * * * *") // every 10 minutes.
@@ -43,10 +44,10 @@ public class FetchBixiTask {
         xmlString = xmlString.substring(xmlString.indexOf("<station>") + 9);
         String[] listeStation = xmlString.split("</station><station>");
 
-        for (String station: listeStation){
-          StationBixi s = stringToStation(station);
-          repository.insert(s);
-          log.info(s.toString());
+        for (String station : listeStation) {
+            StationBixi s = stringToStation(station);
+            repository.insert(s);
+            log.info(s.toString());
         }
     }
 
