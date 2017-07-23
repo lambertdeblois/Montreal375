@@ -5,9 +5,6 @@ import java.util.*;
 import uqam.inf4375.mtl375.domain.*;
 import uqam.inf4375.mtl375.repositories.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.*;

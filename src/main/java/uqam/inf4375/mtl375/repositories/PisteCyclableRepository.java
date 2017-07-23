@@ -1,18 +1,13 @@
 package uqam.inf4375.mtl375.repositories;
 
+import uqam.inf4375.mtl375.domain.PisteCyclable;
+
 import java.util.*;
-import java.util.stream.*;
 import java.sql.*;
 
-import uqam.inf4375.mtl375.domain.*;
-
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.dao.*;
 import org.springframework.jdbc.core.*;
-import org.springframework.jdbc.support.*;
 import org.springframework.stereotype.*;
-import org.postgis.*;
-import org.postgresql.*;
 
 @Component
 public class PisteCyclableRepository {

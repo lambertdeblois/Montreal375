@@ -4,25 +4,23 @@ import uqam.inf4375.mtl375.domain.*;
 import uqam.inf4375.mtl375.repositories.*;
 
 import java.util.*;
-import java.util.stream.*;
-
-import com.fasterxml.jackson.annotation.*;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.net.URL;
 import java.net.URLConnection;
+
 import java.nio.charset.StandardCharsets;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.jsoup.*;
+
 import org.slf4j.*;
 
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.scheduling.annotation.*;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.client.*;
 
 @Component
 public class FetchPistesCyclablesTask {

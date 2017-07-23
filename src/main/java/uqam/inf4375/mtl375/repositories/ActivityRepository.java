@@ -1,30 +1,26 @@
 package uqam.inf4375.mtl375.repositories;
 
 import uqam.inf4375.mtl375.domain.*;
-import java.util.Arrays;
-import java.util.stream.*;
-import java.sql.*;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import java.sql.Array;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.postgis.PGgeometry;
 import org.postgis.Point;
-import org.postgresql.geometric.PGpolygon;
 import org.postgresql.util.PGobject;
-
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 @Component
 public class ActivityRepository {

@@ -1,30 +1,19 @@
 package uqam.inf4375.mtl375.repositories;
 
-import java.util.*;
-import java.util.stream.*;
-import java.sql.*;
-
 import uqam.inf4375.mtl375.domain.*;
 
-import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 import org.postgis.PGgeometry;
 import org.postgis.Point;
-import org.postgresql.geometric.PGpolygon;
 import org.postgresql.util.PGobject;
-import org.postgis.*;
-import org.postgresql.*;
-
 
 import org.springframework.beans.factory.annotation.*;
-import org.springframework.dao.*;
 import org.springframework.jdbc.core.*;
-import org.springframework.jdbc.support.*;
 import org.springframework.stereotype.*;
 
 @Component

@@ -1,16 +1,22 @@
 package uqam.inf4375.mtl375.tasks;
 
-import uqam.inf4375.mtl375.domain.*;
+import uqam.inf4375.mtl375.repositories.ActivityRepository;
+import uqam.inf4375.mtl375.domain.Activity;
+import uqam.inf4375.mtl375.domain.Place;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Arrays;
+
 import java.sql.*;
+
 import org.slf4j.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import uqam.inf4375.mtl375.repositories.ActivityRepository;
+
 
 @Component
 public class FetchActivityTask {

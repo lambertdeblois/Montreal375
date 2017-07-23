@@ -1,7 +1,6 @@
 package uqam.inf4375.mtl375.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
 import java.sql.Date;
 
 public class Activity {
