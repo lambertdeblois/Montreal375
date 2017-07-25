@@ -2,8 +2,8 @@
 
 ## Constitution de l'équipe
 
-- Code permanent: 
-- Code permanent: 
+- Code permanent: DEBL10099404
+- Code permanent: aucune idee
 - Code permanent: 
 
 ## Fonctionnalités à corriger
@@ -19,23 +19,23 @@ points bonis.
 2 personnes: un nombre de fonctionnalités équivalent à 60 XP
 3 personnes: un nombre de fonctionnalités équivalent à 90 XP
 
-- A1 (5 XP) ---------------------------------------------- 
+- A1 (5 XP) -------------------------------------------oui 
 - A2 (8 XP; remplace A1) --------------------------------- 
-- A3 (5 XP; requiert A1 ou A2) --------------------------- 
-- A4 (5 XP; requiert A3) --------------------------------- 
+- A3 (5 XP; requiert A1 ou A2) ------------------------oui 
+- A4 (5 XP; requiert A3) ------------------------------oui 
 
-- B1 (5 XP; requiert A3) --------------------------------- 
-- B2 (5 XP; requiert B1) --------------------------------- 
-- B3 (5 XP; requiert A4 et B1) --------------------------- 
-- B4 (2 XP; requiert B2) --------------------------------- 
+- B1 (5 XP; requiert A3) ------------------------------oui 
+- B2 (5 XP; requiert B1) ------------------------------oui 
+- B3 (5 XP; requiert A4 et B1) ------------------------oui 
+- B4 (2 XP; requiert B2) ------------------------------oui 
 
-- C1 (5 XP) ---------------------------------------------- 
-- C2 (2 XP; requiert C1) --------------------------------- 
-- C3 (5 XP; requiert C1) --------------------------------- 
-- C4 (5 XP; requiert B2, C2 et C3) ----------------------- 
+- C1 (5 XP) -------------------------------------------oui 
+- C2 (2 XP; requiert C1) ------------------------------oui 
+- C3 (5 XP; requiert C1) ------------------------------oui 
+- C4 (5 XP; requiert B2, C2 et C3) --------------------oui 
 
-- D1 (5 XP) ---------------------------------------------- 
-- D2 (10 XP; requiert D1) -------------------------------- 
+- D1 (5 XP) -------------------------------------------oui 
+- D2 (10 XP; requiert D1) -----------------------------oui 
 - D3 (5 XP; requiert B2 et D2) --------------------------- 
 
 - E1 (10 XP; requiert A3 et C3) -------------------------- 
