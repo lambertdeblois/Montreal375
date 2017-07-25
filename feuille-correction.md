@@ -3,8 +3,7 @@
 ## Constitution de l'équipe
 
 - Code permanent: DEBL10099404
-- Code permanent: aucune idee
-- Code permanent: 
+- Code permanent: LAFV13079405
 
 ## Fonctionnalités à corriger
 
