@@ -16,6 +16,13 @@ public class StationBixiController {
     @Autowired
     StationBixiRepository repository;
 
+    /**
+     * Get a specific StationBixi by its ID.
+     *
+     * ROUTE: GET /stationsBixi/{id}
+     *
+     * @return a JSON object containing the stationsBixi.
+     */
     @RequestMapping(value = "/stationsBixi/{id}", method = RequestMethod.GET)
     public ResponseEntity<StationBixi> getStationById(@PathVariable("id") int id) {
         StationBixi station = null;
@@ -31,6 +38,14 @@ public class StationBixiController {
         }
     }
 
+    /**
+     * Get a list of stationsBixi matching the parameters.
+     *
+     * ROUTE: GET /stationsBixi
+     *
+     * @return a list of stationsBixi matching the parameters && a JSON object
+     * containing the status.
+     */
     @RequestMapping(value = "/stationsBixi", method = RequestMethod.GET)
     public ResponseEntity<List<StationBixi>> getStations(@RequestParam(value = "rayon", required = false) Integer rayon,
             @RequestParam(value = "lat", required = false) Double lat,
@@ -54,6 +69,15 @@ public class StationBixiController {
         return getStationsParameters(rayon, lat, longueur, nbBixi);
     }
 
+    /**
+     * Returns a list of stationsBixi matching the parameters
+     * @param rayon 
+     * @param lat pour la geolocalisation de la station
+     * @param longueur pour la geolocalisation de la station
+     * @param nbBixi disponible a la station
+     * @return a list of stationsBixi matching the parameters && a JSON object
+     * containing the status.
+     */
     public ResponseEntity<List<StationBixi>> getStationsParameters(int rayon, Double lat, Double longueur, int nbBixi) {
         if (rayon < 1 || lat < 40 || lat > 50 || longueur < -80 || longueur > -70 || nbBixi < 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
