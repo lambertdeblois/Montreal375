@@ -15,6 +15,14 @@ public class PisteCyclableController {
     @Autowired
     PisteCyclableRepository repository;
 
+    /**
+     * Get all the PistesCyclables.
+     *
+     * ROUTE: GET /pistes
+     *
+     * @return a list of pistes && a JSON object containing the
+     * status.
+     */
     @RequestMapping(value = "/pistes", method = RequestMethod.GET)
     public ResponseEntity<List<PisteCyclable>> getPistes(@RequestParam(value = "rayon", required = false) Integer rayon,
             @RequestParam(value = "lat", required = false) Double lat,

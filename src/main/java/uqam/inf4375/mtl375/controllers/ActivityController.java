@@ -34,7 +34,7 @@ public class ActivityController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-     /**
+    /**
      * Modify a specific activity by its ID.
      *
      * ROUTE: PUT /activities/{id}
@@ -57,12 +57,13 @@ public class ActivityController {
         }
     }
 
-     /**
+    /**
      * Get a list of activities by content.
      *
      * ROUTE: GET /activities/contenu
      *
-     * @return a list of activities with contenu && a JSON object containing the status.
+     * @return a list of activities with contenu && a JSON object containing the
+     * status.
      */
     @RequestMapping(value = "/activities/contenu", method = RequestMethod.GET)
     public ResponseEntity<List<Activity>> findByContenu(@RequestParam("term") String[] tsterms,
@@ -90,7 +91,7 @@ public class ActivityController {
         return new ResponseEntity<List<Activity>>(activities, HttpStatus.OK);
     }
 
-     /**
+    /**
      * Create a new activity.
      *
      * ROUTE: POST /activities
@@ -111,12 +112,13 @@ public class ActivityController {
         }
     }
 
-      /**
+    /**
      * Get a list of activities matching the parameters.
      *
      * ROUTE: GET /activities
      *
-     * @return a list of activities matching the parameters && a JSON object containing the status.
+     * @return a list of activities matching the parameters && a JSON object
+     * containing the status.
      */
     @RequestMapping(value = "/activities", method = RequestMethod.GET)
     public ResponseEntity<List<Activity>> getActivities(@RequestParam(value = "rayon", required = false) Integer rayon,
