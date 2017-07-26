@@ -51,6 +51,12 @@ public class FetchPistesCyclablesTask {
         }
     }
 
+    /**
+     * Returns a new piste.
+     *
+     * @param string the string to build the piste from.
+     * @return a new piste.
+     */
     public PisteCyclable stringToPiste(String string) {
         Pattern pId = Pattern.compile("ID</td><td>([0-9]*)");
         int id = Integer.parseInt(valueMatcher(pId, string));
@@ -71,6 +77,13 @@ public class FetchPistesCyclablesTask {
         return new PisteCyclable(id, coord);
     }
 
+    /**
+     * Returns the matched group.
+     *
+     * @param pattern the pattern to match.
+     * @param string the string to match with the pattern
+     * @return the matched group.
+     */
     public String valueMatcher(Pattern pattern, String string) {
         Matcher matcher = pattern.matcher(string);
         matcher.find();
