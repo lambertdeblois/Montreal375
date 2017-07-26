@@ -51,6 +51,12 @@ public class FetchBixiTask {
         }
     }
 
+    /**
+     * Returns a new stationBixi.
+     *
+     * @param xmlString the string to build the stationBixi from.
+     * @return a new stationBixi.
+     */
     public StationBixi stringToStation(String xmlString) {
         Pattern patternId = Pattern.compile("<id>([0-9]*)</id>");
         int id = Integer.parseInt(valueMatcher(patternId, xmlString));
@@ -73,6 +79,13 @@ public class FetchBixiTask {
         return new StationBixi(id, name, nbBikes, nbEmptyDocks, lat, longueur);
     }
 
+    /**
+     * Returns the matched group.
+     *
+     * @param pattern the pattern to match.
+     * @param xmlString the string to match with the pattern
+     * @return the matched group.
+     */
     public String valueMatcher(Pattern pattern, String xmlString) {
         Matcher matcher = pattern.matcher(xmlString);
         matcher.find();
