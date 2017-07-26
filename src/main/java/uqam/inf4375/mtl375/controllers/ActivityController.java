@@ -17,6 +17,13 @@ public class ActivityController {
     @Autowired
     ActivityRepository repository;
 
+    /**
+     * Delete a specific activity by its ID.
+     *
+     * ROUTE: DELETE /activities/{id}
+     *
+     * @return a JSON object containing the status.
+     */
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Activity> deleteActivity(@PathVariable("id") int id) {
         Activity activity = repository.findById(id);
@@ -27,6 +34,13 @@ public class ActivityController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+     /**
+     * Modify a specific activity by its ID.
+     *
+     * ROUTE: PUT /activities/{id}
+     *
+     * @return a JSON object containing the status.
+     */
     @RequestMapping(value = "/activities/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Activity> updateActivity(@RequestBody Activity activity, @PathVariable("id") int id) {
         // valider le json qui rentre par le js avant dappeler la route
@@ -43,6 +57,13 @@ public class ActivityController {
         }
     }
 
+     /**
+     * Get a list of activities by content.
+     *
+     * ROUTE: GET /activities/contenu
+     *
+     * @return a list of activities with contenu && a JSON object containing the status.
+     */
     @RequestMapping(value = "/activities/contenu", method = RequestMethod.GET)
     public ResponseEntity<List<Activity>> findByContenu(@RequestParam("term") String[] tsterms,
             @RequestParam(value = "from", required = false) String from,
@@ -69,6 +90,13 @@ public class ActivityController {
         return new ResponseEntity<List<Activity>>(activities, HttpStatus.OK);
     }
 
+     /**
+     * Create a new activity.
+     *
+     * ROUTE: POST /activities
+     *
+     * @return the activity (if created) && a JSON object containing the status.
+     */
     @RequestMapping(value = "/activities", method = RequestMethod.POST)
     public ResponseEntity<Activity> addActivity(@RequestBody Activity activite) {
         try {
@@ -83,6 +111,13 @@ public class ActivityController {
         }
     }
 
+      /**
+     * Get a list of activities matching the parameters.
+     *
+     * ROUTE: GET /activities
+     *
+     * @return a list of activities matching the parameters && a JSON object containing the status.
+     */
     @RequestMapping(value = "/activities", method = RequestMethod.GET)
     public ResponseEntity<List<Activity>> getActivities(@RequestParam(value = "rayon", required = false) Integer rayon,
             @RequestParam(value = "lat", required = false) Double lat,
