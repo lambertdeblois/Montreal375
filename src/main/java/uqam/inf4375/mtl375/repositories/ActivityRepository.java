@@ -33,6 +33,12 @@ public class ActivityRepository {
             + " values (?, ?, ?, ?, ?, ?, ST_SetSRID(ST_MakePoint(?, ?), 4326))"
             + " on conflict do nothing";
 
+    /**
+     * Insert an Activity into the DB.
+     *
+     * @param activity the activity to insert.
+     * @return
+     */
     public int insert(Activity activity) {
         return jdbcTemplate.update(conn -> {
             PreparedStatement ps = conn.prepareStatement(INSERT_STMT);
@@ -57,6 +63,12 @@ public class ActivityRepository {
 
     private static final String FIND_ID_STMT = "select * from activities where id=?";
 
+    /**
+     * Find an Activity in the DB by its id.
+     *
+     * @param id the activity's id to search.
+     * @return the Activity or null if none.
+     */
     public Activity findById(int id) {
         try {
             return jdbcTemplate.queryForObject(FIND_ID_STMT, new Object[]{id}, new ActivityRowMapper());
